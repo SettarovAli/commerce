@@ -47,7 +47,8 @@ export default async function Navbar() {
             <Search />
           </Suspense>
         </div>
-        <div className="flex justify-end md:w-1/3">
+        <div className="flex items-center justify-end gap-4 md:w-1/3">
+          <Link href="/sign-in">Login</Link>
           <Suspense fallback={<OpenCart />}>
             <Cart />
           </Suspense>
