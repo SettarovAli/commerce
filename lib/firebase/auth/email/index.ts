@@ -1,5 +1,5 @@
 import { auth } from '@/lib/firebase';
-import { generateFirebaseAuthErrorMessage } from '@/lib/firebase/error-handler';
+import { generateFirebaseAuthErrorMessage } from '@/lib/firebase/auth/error-handler';
 import { Routes } from '@/routes';
 import { FirebaseError } from 'firebase/app';
 import {
