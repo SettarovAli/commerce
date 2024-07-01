@@ -29,12 +29,13 @@ export const deleteUserFromFirestore = async (
       const googleProvider = new GoogleAuthProvider();
       await reauthenticateWithPopup(user, googleProvider);
       await deleteUser(user);
+      toast.success('Your account has been deleted.');
       router.push(Routes.Home);
       return;
     }
 
     if (isEmailUser) {
-      if (!password || password === '') {
+      if (!password) {
         toast.error('Please enter your password');
         return;
       }
@@ -42,13 +43,14 @@ export const deleteUserFromFirestore = async (
       const credential = EmailAuthProvider.credential(userEmail, password);
       await reauthenticateWithCredential(user, credential);
       await deleteUser(user);
+      toast.success('Your account has been deleted.');
       router.push(Routes.Home);
     }
   } catch (error) {
     if (error instanceof FirebaseError) {
       toast.error(generateFirebaseAuthErrorMessage(error));
-      return;
     }
+    console.error(error);
   } finally {
     setIsLoading(false);
   }
