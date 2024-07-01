@@ -42,28 +42,22 @@ export const updateUserPassword = async (
   router: AppRouterInstance
 ) => {
   try {
-    //  check if valid user
     const user = auth.currentUser;
     if (!user) return;
-    // check if current password is valid
     if (!currentPassword || currentPassword === '' || currentPassword.length < 6) {
       toast.error('Please enter your current password');
       return;
     }
-    // check if new password is valid
     if (!newPassword || newPassword === '') {
       toast.error('Please enter your new password');
       return;
     }
     setIsLoading(true);
-    // validate old password
     const credential = EmailAuthProvider.credential(user.email as string, currentPassword);
-    // reauthenticate user
     await reauthenticateWithCredential(user, credential);
-    // update password
     await updatePassword(user, newPassword);
-    router.push(Routes.SignIn);
     toast.success('Password updated successfully');
+    router.push(Routes.SignIn);
   } catch (error) {
     if (error instanceof FirebaseError) {
       toast.error(generateFirebaseAuthErrorMessage(error));

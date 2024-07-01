@@ -1,3 +1,4 @@
+import SignIn from '@/components/layout/navbar/sign-in';
 import Cart from 'components/cart';
 import OpenCart from 'components/cart/open-cart';
 import LogoSquare from 'components/logo-square';
@@ -7,6 +8,7 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import MobileMenu from './mobile-menu';
 import Search, { SearchSkeleton } from './search';
+
 const { SITE_NAME } = process.env;
 
 export default async function Navbar() {
@@ -48,7 +50,7 @@ export default async function Navbar() {
           </Suspense>
         </div>
         <div className="flex items-center justify-end gap-4 md:w-1/3">
-          <Link href="/sign-in">Login</Link>
+          <SignIn />
           <Suspense fallback={<OpenCart />}>
             <Cart />
           </Suspense>

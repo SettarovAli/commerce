@@ -68,7 +68,7 @@ export const updateUserEmail = async (
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   try {
-    if (auth.currentUser === null) return;
+    if (!auth.currentUser) return;
     setIsLoading(true);
 
     // Reauthenticate the user before updating the email

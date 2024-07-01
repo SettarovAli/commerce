@@ -1,18 +1,21 @@
+import { HTMLInputTypeAttribute } from 'react';
+
 type InputProps = {
   label: string;
   name: string;
   value: string;
   onChange: React.Dispatch<React.SetStateAction<string>>;
+  type?: HTMLInputTypeAttribute;
 };
 
-const Input: React.FC<InputProps> = ({ name, label, value, onChange }) => {
+const Input: React.FC<InputProps> = ({ name, label, value, onChange, type }) => {
   return (
     <div>
       <label htmlFor={name} className="block text-sm font-medium leading-6 text-gray-900">
         {label}
       </label>
       <input
-        type={name}
+        type={type || name}
         id={name}
         required
         value={value}
