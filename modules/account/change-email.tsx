@@ -24,7 +24,7 @@ const ChangeEmail: React.FC<ChangeEmailProps> = ({ user }) => {
         <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
           <div className="sm:col-span-4">
             <div className="mt-4 w-1/2">
-              <Button type="button" onClick={() => setIsOpen(!isOpen)}>
+              <Button type="button" onClick={() => setIsOpen(true)}>
                 Update Email
               </Button>
             </div>

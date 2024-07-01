@@ -3,6 +3,7 @@
 import { auth } from '@/lib/firebase';
 import ChangeEmail from '@/modules/account/change-email';
 import ChangePassword from '@/modules/account/change-password';
+import DeleteUser from '@/modules/account/delete-user';
 import SignOut from '@/modules/account/sign-out';
 import RequireUser from '@/modules/auth/require-user';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -28,7 +29,7 @@ export default function AccountLayout() {
               <ChangePassword />
             </>
           )}
-          {/* <DeleteUser /> */}
+          <DeleteUser />
         </div>
       </section>
     </RequireUser>

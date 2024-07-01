@@ -1,12 +1,20 @@
 import clsx from 'clsx';
 
-const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
-  const { children, ...rest } = props;
+type Props = {
+  variant?: 'red';
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+const Button: React.FC<Props> = (props) => {
+  const { children, className, variant, ...rest } = props;
 
   return (
     <button
       className={clsx(
-        'flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-md hover:bg-blue-500 disabled:opacity-50'
+        'flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-md hover:bg-blue-500 disabled:opacity-50',
+        className,
+        {
+          'bg-red-600 hover:bg-red-500': variant === 'red'
+        }
       )}
       {...rest}
     >
