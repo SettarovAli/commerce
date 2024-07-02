@@ -11,15 +11,17 @@ const RequireUser: React.FC<PropsWithChildren> = ({ children }) => {
 
   const router = useRouter();
 
+  const withoutUser = !user || !user?.emailVerified;
+
   useEffect(() => {
-    if (!user) {
+    if (withoutUser) {
       router.push(Routes.SignIn);
     }
-  }, [router, user]);
+  }, [router, withoutUser]);
 
   if (loading) return <div>Loading...</div>;
 
-  if (!user) return null;
+  if (withoutUser) return null;
 
   return children;
 };
