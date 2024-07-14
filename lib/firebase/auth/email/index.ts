@@ -8,7 +8,8 @@ import {
   reauthenticateWithCredential,
   sendEmailVerification,
   signInWithEmailAndPassword,
-  updateEmail
+  updateEmail,
+  updateProfile
 } from 'firebase/auth';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { toast } from 'react-toastify';
@@ -22,10 +23,13 @@ export const signUpUser = async (
 ) => {
   try {
     setLoading(true);
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    await sendEmailVerification(userCredential.user);
+    const { user } = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(user, {
+      displayName: name
+    });
+    await sendEmailVerification(user);
     toast.success(
-      `A verification email has been sent to your email address ${name}. Please verify your email to login.`
+      `A verification email has been sent to your email address, ${name}. Please verify your email to login.`
     );
     router.push(Routes.SignIn);
   } catch (error) {
@@ -46,10 +50,11 @@ export const loginUserWithEmailAndPassword = async (
 ) => {
   try {
     setLoading(true);
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    if (userCredential.user.emailVerified === false) {
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    if (user.emailVerified === false) {
       return toast.error('Please verify your email to login.');
     }
+    toast.success(`Welcome, ${user.displayName}!`);
     router.push(Routes.Home);
   } catch (error) {
     if (error instanceof FirebaseError) {
@@ -68,18 +73,14 @@ export const updateUserEmail = async (
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   try {
-    if (!auth.currentUser) return;
+    const user = auth.currentUser;
+    if (!user) return;
+
     setIsLoading(true);
-
-    // Reauthenticate the user before updating the email
     const credential = EmailAuthProvider.credential(email, password);
-    await reauthenticateWithCredential(auth.currentUser, credential);
-
-    // Update the email after successful reauthentication
-    await updateEmail(auth.currentUser, newEmail);
-
-    // Send email verification to the new email
-    await sendEmailVerification(auth.currentUser);
+    await reauthenticateWithCredential(user, credential);
+    await updateEmail(user, newEmail);
+    await sendEmailVerification(user);
     toast.success(
       `A verification email has been sent to your new email address ${newEmail}. Please verify your email to login.`
     );

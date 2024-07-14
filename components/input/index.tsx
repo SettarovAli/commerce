@@ -20,6 +20,7 @@ const Input: React.FC<InputProps> = ({ name, label, value, onChange, type, error
         id={name}
         required
         value={value}
+        autoComplete={name}
         onChange={(e) => onChange(e.target.value)}
         className="mt-2 block w-full rounded-md border-0 p-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400"
       />

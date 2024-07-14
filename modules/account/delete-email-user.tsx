@@ -1,22 +1,16 @@
-'use client';
-
 import Button from '@/components/button';
 import Input from '@/components/input';
-import { loginUserWithEmailAndPassword } from '@/lib/firebase/auth/email';
+import { deleteUserFromFirestore } from '@/lib/firebase/auth/delete-user';
 import { ValidationError, ValidationFields, handleValidation } from '@/lib/zod';
-import { Routes } from '@/routes';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { z } from 'zod';
 
 const Schema = z.object({
-  email: ValidationFields.EMAIL,
   password: ValidationFields.PASSWORD
 });
 
-const SignInForm = () => {
-  const [email, setEmail] = useState('');
+const DeleteEmailUser: React.FC = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<ValidationError<typeof Schema>>({});
@@ -26,25 +20,23 @@ const SignInForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleValidation({
-      data: { email, password },
+      data: { password },
       schema: Schema,
       onError: setErrors,
       onSuccess: (res) => {
-        loginUserWithEmailAndPassword(res.email, res.password, setIsLoading, router);
+        deleteUserFromFirestore(router, setIsLoading, res.password);
         setErrors({});
       }
     });
   };
 
   return (
-    <form className="mt-10 flex flex-col gap-4" onSubmit={handleSubmit} noValidate>
-      <Input
-        label="Email address"
-        name="email"
-        value={email}
-        onChange={setEmail}
-        error={errors.email}
-      />
+    <form
+      className="mt-4 flex flex-col gap-4 text-sm text-gray-500"
+      onSubmit={handleSubmit}
+      noValidate
+    >
+      Please enter your password to delete your account:
       <Input
         label="Password"
         name="password"
@@ -52,17 +44,11 @@ const SignInForm = () => {
         onChange={setPassword}
         error={errors.password}
       />
-      <Link
-        href={Routes.ForgotPassword}
-        className="flex justify-end self-end text-sm font-semibold leading-6 text-blue-600 hover:text-blue-500"
-      >
-        Forgot Password
-      </Link>
-      <Button type="submit" isLoading={isLoading}>
-        Sign In
+      <Button type="submit" isLoading={isLoading} variant="red">
+        Confirm delete
       </Button>
     </form>
   );
 };
 
-export default SignInForm;
+export default DeleteEmailUser;

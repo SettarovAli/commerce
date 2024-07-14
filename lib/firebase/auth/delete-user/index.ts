@@ -1,5 +1,6 @@
 import { auth } from '@/lib/firebase';
 import { generateFirebaseAuthErrorMessage } from '@/lib/firebase/auth/error-handler';
+import { checkUserProvider } from '@/lib/firebase/auth/utils/check-user-provider';
 import { Routes } from '@/routes';
 import { FirebaseError } from 'firebase/app';
 import {
@@ -14,14 +15,14 @@ import { toast } from 'react-toastify';
 
 export const deleteUserFromFirestore = async (
   router: AppRouterInstance,
-  isEmailUser: boolean,
-  isGoogleUser: boolean,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   password?: string
 ) => {
   try {
-    const user = auth?.currentUser;
+    const user = auth.currentUser;
     if (!user) return;
+
+    const { isEmailUser, isGoogleUser } = checkUserProvider();
 
     setIsLoading(true);
 
@@ -29,22 +30,13 @@ export const deleteUserFromFirestore = async (
       const googleProvider = new GoogleAuthProvider();
       await reauthenticateWithPopup(user, googleProvider);
       await deleteUser(user);
-      toast.success('Your account has been deleted.');
-      router.push(Routes.Home);
       return;
     }
 
-    if (isEmailUser) {
-      if (!password) {
-        toast.error('Please enter your password');
-        return;
-      }
-      const userEmail = user.email as string;
-      const credential = EmailAuthProvider.credential(userEmail, password);
+    if (isEmailUser && user.email && password) {
+      const credential = EmailAuthProvider.credential(user.email, password);
       await reauthenticateWithCredential(user, credential);
       await deleteUser(user);
-      toast.success('Your account has been deleted.');
-      router.push(Routes.Home);
     }
   } catch (error) {
     if (error instanceof FirebaseError) {
@@ -52,6 +44,8 @@ export const deleteUserFromFirestore = async (
     }
     console.error(error);
   } finally {
+    toast.success('Your account has been deleted.');
+    router.push(Routes.SignIn);
     setIsLoading(false);
   }
 };

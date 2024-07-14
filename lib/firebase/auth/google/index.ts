@@ -10,11 +10,11 @@ export const signInUserWithGoogle = async (router: AppRouterInstance) => {
   try {
     const result = await signInWithPopup(auth, googleAuthProvider);
     if (!result || !result.user) {
-      throw new Error('No user found');
+      toast.error('No user found');
     }
     const user = result.user;
-    router.push(Routes.Home);
     toast.success(`Welcome ${user.displayName}!`);
+    router.push(Routes.Home);
   } catch (error) {
     if (error instanceof FirebaseError) {
       toast.error(generateFirebaseAuthErrorMessage(error));
