@@ -22,8 +22,10 @@ export const generateFirebaseAuthErrorMessage = (error: FirebaseError) => {
       return 'Invalid verification ID. Please try again.';
     case 'auth/code-expired':
       return 'Code expired. Please try again.';
+    case 'auth/expired-action-code':
+      return 'The verification code has expired. Please try again.';
     case 'auth/invalid-action-code':
-      return 'Invalid action code. Please try again.';
+      return 'The verification code is invalid. Please try again.';
     case 'auth/user-disabled':
       return 'User disabled. Please contact support.';
     case 'auth/invalid-credential':

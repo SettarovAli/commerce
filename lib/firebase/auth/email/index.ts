@@ -4,6 +4,7 @@ import { Routes } from '@/routes';
 import { FirebaseError } from 'firebase/app';
 import {
   EmailAuthProvider,
+  applyActionCode,
   createUserWithEmailAndPassword,
   reauthenticateWithCredential,
   sendEmailVerification,
@@ -91,5 +92,17 @@ export const updateUserEmail = async (
     console.error(error);
   } finally {
     setIsLoading(false);
+  }
+};
+
+export const verifyEmail = async (actionCode: string) => {
+  try {
+    await applyActionCode(auth, actionCode);
+    toast.success('Your email has been verified');
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      toast.error(generateFirebaseAuthErrorMessage(error));
+    }
+    console.error(error);
   }
 };
