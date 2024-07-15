@@ -3,6 +3,7 @@ import Input from '@/components/input';
 import { updateUserEmail } from '@/lib/firebase/auth/email';
 import { ValidationError, ValidationFields, handleValidation } from '@/lib/zod';
 import { User } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { z } from 'zod';
 
@@ -23,6 +24,8 @@ const ChangeEmailForm: React.FC<ChangeEmailFormProps> = ({ user }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<ValidationError<typeof Schema>>({});
 
+  const router = useRouter();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleValidation({
@@ -30,7 +33,7 @@ const ChangeEmailForm: React.FC<ChangeEmailFormProps> = ({ user }) => {
       schema: Schema,
       onError: setErrors,
       onSuccess: (res) => {
-        updateUserEmail(res.email, res.newEmail, res.password, setIsLoading);
+        updateUserEmail(res.email, res.newEmail, res.password, setIsLoading, router);
         setErrors({});
       }
     });

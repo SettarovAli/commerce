@@ -5,9 +5,11 @@ import { FirebaseError } from 'firebase/app';
 import {
   EmailAuthProvider,
   applyActionCode,
+  checkActionCode,
   createUserWithEmailAndPassword,
   reauthenticateWithCredential,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   updateEmail,
   updateProfile
@@ -71,7 +73,8 @@ export const updateUserEmail = async (
   email: string,
   newEmail: string,
   password: string,
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  router: AppRouterInstance
 ) => {
   try {
     const user = auth.currentUser;
@@ -85,6 +88,7 @@ export const updateUserEmail = async (
     toast.success(
       `A verification email has been sent to your new email address ${newEmail}. Please verify your email to login.`
     );
+    router.push(Routes.SignIn);
   } catch (error) {
     if (error instanceof FirebaseError) {
       toast.error(generateFirebaseAuthErrorMessage(error));
@@ -104,5 +108,21 @@ export const verifyEmail = async (actionCode: string) => {
       toast.error(generateFirebaseAuthErrorMessage(error));
     }
     console.error(error);
+  }
+};
+
+export const recoverEmail = async (actionCode: string) => {
+  try {
+    const info = await checkActionCode(auth, actionCode);
+    const restoredEmail = info['data']['email']!;
+    await applyActionCode(auth, actionCode);
+    await sendPasswordResetEmail(auth, restoredEmail);
+    return { restoredEmail };
+  } catch (error: any) {
+    if (error instanceof FirebaseError) {
+      return { error: generateFirebaseAuthErrorMessage(error) };
+    }
+    console.error(error);
+    return { error: error?.message };
   }
 };

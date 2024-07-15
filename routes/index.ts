@@ -6,5 +6,6 @@ export enum Routes {
   VerifyEmail = '/auth/verify-email',
   ResetPassword = '/auth/reset-password',
   RecoverEmail = '/auth/recover-email',
+  AuthAction = '/auth/action',
   Account = '/account'
 }
