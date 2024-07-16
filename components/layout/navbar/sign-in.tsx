@@ -18,8 +18,9 @@ const SignIn: React.FC = () => {
 
   if (!user || !user?.emailVerified) {
     return (
-      <Link href={Routes.SignIn} className="flex items-center gap-1 hover:opacity-70">
-        Log in <ArrowRightEndOnRectangleIcon className="h-5" />
+      <Link href={Routes.SignIn} className="flex shrink-0 items-center gap-1 hover:opacity-70">
+        <span className="hidden sm:block">Log in</span>
+        <ArrowRightEndOnRectangleIcon className="h-5" />
       </Link>
     );
   }
