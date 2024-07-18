@@ -1,5 +1,6 @@
 'use client';
 
+import LoadingDots from '@/components/loading-dots';
 import { auth } from '@/lib/firebase';
 import { Routes } from '@/routes';
 import { ArrowRightEndOnRectangleIcon, UserCircleIcon } from '@heroicons/react/24/outline';
@@ -13,7 +14,7 @@ const SignIn: React.FC = () => {
   const isGoogleUser = user?.providerData[0]?.providerId === 'google.com';
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingDots className="bg-black dark:bg-white" />;
   }
 
   if (!user || !user?.emailVerified) {
