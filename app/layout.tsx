@@ -1,15 +1,14 @@
 import Navbar from 'components/layout/navbar';
 import { GeistSans } from 'geist/font/sans';
 import { ensureStartsWith } from 'lib/utils';
+import { getBaseUrl } from 'lib/utils/get-base-url';
 import { ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 
-const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME, NEXT_PUBLIC_VERCEL_URL } = process.env;
-const baseUrl = NEXT_PUBLIC_VERCEL_URL
-  ? `https://${NEXT_PUBLIC_VERCEL_URL}`
-  : 'http://localhost:3000';
+const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
+const baseUrl = getBaseUrl();
 const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
 const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;
 
