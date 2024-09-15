@@ -7,14 +7,15 @@ export async function middleware(request: NextRequest) {
   try {
     if (pathname === Routes.AuthAction) {
       const mode = searchParams.get('mode');
-      if (mode === 'resetPassword') {
-        return NextResponse.redirect(new URL(`${Routes.ResetPassword}${search}`, request.url));
-      }
-      if (mode === 'verifyEmail') {
-        return NextResponse.redirect(new URL(`${Routes.VerifyEmail}${search}`, request.url));
-      }
-      if (mode === 'recoverEmail') {
-        return NextResponse.redirect(new URL(`${Routes.RecoverEmail}${search}`, request.url));
+      switch (mode) {
+        case 'resetPassword':
+          return NextResponse.redirect(new URL(`${Routes.ResetPassword}${search}`, request.url));
+        case 'verifyEmail':
+          return NextResponse.redirect(new URL(`${Routes.VerifyEmail}${search}`, request.url));
+        case 'recoverEmail':
+          return NextResponse.redirect(new URL(`${Routes.RecoverEmail}${search}`, request.url));
+        default:
+          break;
       }
     }
   } catch (error: any) {
