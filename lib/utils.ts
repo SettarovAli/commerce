@@ -1,5 +1,7 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
 
+const { SHOPIFY_STORE_DOMAIN } = process.env;
+
 export const createUrl = (pathname: string, params: URLSearchParams | ReadonlyURLSearchParams) => {
   const paramsString = params.toString();
   const queryString = `${paramsString.length ? '?' : ''}${paramsString}`;
@@ -28,10 +30,7 @@ export const validateEnvironmentVariables = () => {
     );
   }
 
-  if (
-    process.env.SHOPIFY_STORE_DOMAIN?.includes('[') ||
-    process.env.SHOPIFY_STORE_DOMAIN?.includes(']')
-  ) {
+  if (SHOPIFY_STORE_DOMAIN?.includes('[') || SHOPIFY_STORE_DOMAIN?.includes(']')) {
     throw new Error(
       'Your `SHOPIFY_STORE_DOMAIN` environment variable includes brackets (ie. `[` and / or `]`). Your site will not work with them there. Please remove them.'
     );

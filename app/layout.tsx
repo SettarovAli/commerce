@@ -6,9 +6,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 
-const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME } = process.env;
-const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+const { TWITTER_CREATOR, TWITTER_SITE, SITE_NAME, NEXT_PUBLIC_VERCEL_URL } = process.env;
+const baseUrl = NEXT_PUBLIC_VERCEL_URL
+  ? `https://${NEXT_PUBLIC_VERCEL_URL}`
   : 'http://localhost:3000';
 const twitterCreator = TWITTER_CREATOR ? ensureStartsWith(TWITTER_CREATOR, '@') : undefined;
 const twitterSite = TWITTER_SITE ? ensureStartsWith(TWITTER_SITE, 'https://') : undefined;

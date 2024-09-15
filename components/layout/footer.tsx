@@ -5,6 +5,8 @@ import LogoSquare from 'components/logo-square';
 import { getMenu } from 'lib/shopify';
 import { Suspense } from 'react';
 
+const { SITE_NAME } = process.env;
+
 export default async function Footer() {
   const skeleton = 'w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700';
   const menu = await getMenu('next-js-frontend-footer-menu');
@@ -15,7 +17,7 @@ export default async function Footer() {
         <div>
           <Link className="flex items-center gap-2 text-black md:pt-1 dark:text-white" href="/">
             <LogoSquare size="sm" />
-            <span className="uppercase">{process.env.SITE_NAME}</span>
+            <span className="uppercase">{SITE_NAME}</span>
           </Link>
         </div>
         <Suspense

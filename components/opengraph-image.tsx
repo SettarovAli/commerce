@@ -5,10 +5,12 @@ export type Props = {
   title?: string;
 };
 
+const { SITE_NAME } = process.env;
+
 export default async function OpengraphImage(props?: Props): Promise<ImageResponse> {
   const { title } = {
     ...{
-      title: process.env.SITE_NAME
+      title: SITE_NAME
     },
     ...props
   };
