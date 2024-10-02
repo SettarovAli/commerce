@@ -1,6 +1,6 @@
 'use client';
 
-import { verifyResetPasswordCode } from '@/lib/firebase/auth/password';
+import { verifyResetPasswordCode } from '@/lib/firebase/auth/actions';
 import ResetPasswordForm from '@/modules/reset-password/reset-password-form';
 import { Routes } from '@/routes';
 import { useRouter } from 'next/navigation';
@@ -17,8 +17,8 @@ const ResetPassword = () => {
     const verifyActionCode = async (actionCode: string) => {
       const res = await verifyResetPasswordCode(actionCode);
 
-      if (res?.error) {
-        setError(res.error);
+      if (!res.success) {
+        setError(res?.notification || '');
         return;
       }
 

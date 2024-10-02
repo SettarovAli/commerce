@@ -1,13 +1,17 @@
+'use client';
+
 import LoadingDots from '@/components/loading-dots';
 import clsx from 'clsx';
+import { useFormStatus } from 'react-dom';
 
 type Props = {
   variant?: 'red';
-  isLoading?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button: React.FC<Props> = (props) => {
-  const { children, className, disabled, variant, isLoading, ...rest } = props;
+  const { children, className, disabled, variant, ...rest } = props;
+
+  const { pending } = useFormStatus();
 
   return (
     <button
@@ -18,11 +22,11 @@ const Button: React.FC<Props> = (props) => {
           'bg-red-600 hover:bg-red-500': variant === 'red'
         }
       )}
-      disabled={isLoading || disabled}
+      disabled={pending || disabled}
       {...rest}
     >
       {children}
-      {isLoading && <LoadingDots className="bg-white" />}
+      {pending && <LoadingDots className="bg-white" />}
     </button>
   );
 };

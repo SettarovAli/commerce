@@ -1,6 +1,6 @@
 'use client';
 
-import { verifyEmail } from '@/lib/firebase/auth/email';
+import { verifyEmail } from '@/lib/firebase/auth/actions';
 import { Routes } from '@/routes';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

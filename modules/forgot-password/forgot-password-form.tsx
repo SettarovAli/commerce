@@ -2,49 +2,25 @@
 
 import Button from '@/components/button';
 import Input from '@/components/input';
-import { forgotPassword } from '@/lib/firebase/auth/password';
-import { ValidationError, ValidationFields, handleValidation } from '@/lib/zod';
+import { useAuthAction } from '@/hooks/use-auth-action';
+import { resetForgotPasswordAction } from '@/lib/firebase/auth/server-actions';
+import { Routes } from '@/routes';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { z } from 'zod';
-
-const Schema = z.object({
-  email: ValidationFields.EMAIL
-});
 
 const ForgotPasswordForm = () => {
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<ValidationError<typeof Schema>>({});
-
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleValidation({
-      data: { email },
-      schema: Schema,
-      onError: setErrors,
-      onSuccess: (res) => {
-        forgotPassword(res.email, setIsLoading, router);
-        setEmail('');
-        setErrors({});
-      }
-    });
-  };
+  const { action, errors } = useAuthAction({
+    authAction: resetForgotPasswordAction,
+    onSuccess: () => {
+      router.push(Routes.SignIn);
+    }
+  });
 
   return (
-    <form className="mx-auto max-w-3xl space-y-6" onSubmit={handleSubmit} noValidate>
-      <Input
-        label="Email address"
-        name="email"
-        value={email}
-        onChange={setEmail}
-        error={errors.email}
-      />
-      <Button type="submit" isLoading={isLoading}>
-        Reset Password
-      </Button>
+    <form className="mx-auto max-w-3xl space-y-6" action={action} noValidate>
+      <Input type="email" name="email" label="Email address" errors={errors.email} />
+      <Button type="submit">Reset Password</Button>
     </form>
   );
 };

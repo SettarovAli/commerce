@@ -1,50 +1,29 @@
 import Button from '@/components/button';
 import Input from '@/components/input';
-import { deleteUserFromFirestore } from '@/lib/firebase/auth/delete-user';
-import { ValidationError, ValidationFields, handleValidation } from '@/lib/zod';
+import { useAuthAction } from '@/hooks/use-auth-action';
+import { deleteEmailUser } from '@/lib/firebase/auth/actions';
+import { deleteEmailUserAction } from '@/lib/firebase/auth/server-actions';
+import { Routes } from '@/routes';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { z } from 'zod';
-
-const Schema = z.object({
-  password: ValidationFields.PASSWORD
-});
 
 const DeleteEmailUser: React.FC = () => {
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<ValidationError<typeof Schema>>({});
-
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleValidation({
-      data: { password },
-      schema: Schema,
-      onError: setErrors,
-      onSuccess: (res) => {
-        deleteUserFromFirestore(router, setIsLoading, res.password);
-        setErrors({});
-      }
-    });
-  };
+  const { action, errors } = useAuthAction({
+    authAction: deleteEmailUserAction,
+    clientAction: async (data: Record<'password', string>) => {
+      return await deleteEmailUser(data.password);
+    },
+    onSuccess: () => {
+      router.push(Routes.SignIn);
+    }
+  });
 
   return (
-    <form
-      className="mt-4 flex flex-col gap-4 text-sm text-gray-500"
-      onSubmit={handleSubmit}
-      noValidate
-    >
+    <form className="mt-4 flex flex-col gap-4 text-sm text-gray-500" action={action} noValidate>
       Please enter your password to delete your account:
-      <Input
-        label="Password"
-        name="password"
-        value={password}
-        onChange={setPassword}
-        error={errors.password}
-      />
-      <Button type="submit" isLoading={isLoading} variant="red">
+      <Input type="password" name="password" label="Password" errors={errors.password} />
+      <Button type="submit" variant="red">
         Confirm delete
       </Button>
     </form>

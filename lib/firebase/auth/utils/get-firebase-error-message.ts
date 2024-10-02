@@ -2,7 +2,7 @@ import { FirebaseError } from 'firebase/app';
 
 // https://firebase.google.com/docs/auth/admin/errors
 
-export const generateFirebaseAuthErrorMessage = (error: FirebaseError) => {
+export const getFirebaseErrorMessage = (error: FirebaseError) => {
   switch (error?.code) {
     case 'auth/invalid-email':
       return 'Invalid email address. Please enter a valid email.';

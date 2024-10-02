@@ -30,7 +30,7 @@ export default function AccountLayout() {
           <SignOut />
           {user && !isGoogleUser && (
             <>
-              <ChangeEmail user={user} />
+              <ChangeEmail />
               <ChangePassword />
             </>
           )}

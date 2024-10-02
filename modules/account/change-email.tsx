@@ -3,14 +3,9 @@
 import Button from '@/components/button';
 import Modal from '@/components/modal';
 import ChangeEmailForm from '@/modules/account/change-email-form';
-import { User } from 'firebase/auth';
 import React, { useState } from 'react';
 
-type ChangeEmailProps = {
-  user: User;
-};
-
-const ChangeEmail: React.FC<ChangeEmailProps> = ({ user }) => {
+const ChangeEmail: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpenModal = () => setIsOpen(true);
@@ -32,7 +27,7 @@ const ChangeEmail: React.FC<ChangeEmailProps> = ({ user }) => {
               </Button>
             </div>
             <Modal isOpen={isOpen} onClose={handleCloseModal}>
-              <ChangeEmailForm user={user} />
+              <ChangeEmailForm />
             </Modal>
           </div>
         </div>
