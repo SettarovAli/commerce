@@ -1,10 +1,11 @@
 'use client';
 
-import { verifyResetPasswordCode } from '@/lib/firebase/auth/password';
-import ResetPasswordForm from '@/modules/reset-password/reset-password-form';
-import { Routes } from '@/routes';
+import LoadingDots from 'components/loading-dots';
+import { authService } from 'lib/firebase/auth/service';
+import ResetPasswordForm from 'modules/reset-password/reset-password-form';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Routes } from 'routes';
 
 const ResetPassword = () => {
   const [actionCode, setActionCode] = useState('');
@@ -15,10 +16,10 @@ const ResetPassword = () => {
 
   useEffect(() => {
     const verifyActionCode = async (actionCode: string) => {
-      const res = await verifyResetPasswordCode(actionCode);
+      const res = await authService.verifyResetPasswordCode(actionCode);
 
-      if (res?.error) {
-        setError(res.error);
+      if (!res.success) {
+        setError(res?.message || 'Something went wrong');
         return;
       }
 
@@ -35,6 +36,14 @@ const ResetPassword = () => {
     verifyActionCode(actionCode);
     setActionCode(actionCode);
   }, [router]);
+
+  if (!isVerified && !error) {
+    return (
+      <div className="flex justify-center">
+        <LoadingDots className="h-3 w-3 bg-black dark:bg-white" />
+      </div>
+    );
+  }
 
   return (
     <>
