@@ -1,13 +1,12 @@
-import Button from '@/components/button';
-import Modal from '@/components/modal';
-import DeleteUserForm from '@/modules/account/delete-user-form';
-import { useState } from 'react';
+'use client';
+
+import Button from 'components/button';
+import Modal from 'components/modal';
+import { useModal } from 'hooks/use-modal';
+import DeleteUserForm from 'modules/account/delete-user-form';
 
 const DeleteUser = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleOpenModal = () => setIsOpen(true);
-  const handleCloseModal = () => setIsOpen(false);
+  const { isOpen, handleOpenModal, handleCloseModal } = useModal();
 
   return (
     <div>

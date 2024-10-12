@@ -1,13 +1,12 @@
-import Button from '@/components/button';
-import Modal from '@/components/modal';
-import ChangePasswordForm from '@/modules/account/change-password-form';
-import { useState } from 'react';
+'use client';
+
+import Button from 'components/button';
+import Modal from 'components/modal';
+import { useModal } from 'hooks/use-modal';
+import ChangePasswordForm from 'modules/account/change-password-form';
 
 const ChangePassword = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleOpenModal = () => setIsOpen(true);
-  const handleCloseModal = () => setIsOpen(false);
+  const { isOpen, handleOpenModal, handleCloseModal } = useModal();
 
   return (
     <div className="space-y-12">
