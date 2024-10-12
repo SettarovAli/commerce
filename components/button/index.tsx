@@ -1,13 +1,11 @@
-import LoadingDots from '@/components/loading-dots';
 import clsx from 'clsx';
 
 type Props = {
   variant?: 'red';
-  isLoading?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button: React.FC<Props> = (props) => {
-  const { children, className, disabled, variant, isLoading, ...rest } = props;
+  const { children, className, disabled, variant, ...rest } = props;
 
   return (
     <button
@@ -18,11 +16,10 @@ const Button: React.FC<Props> = (props) => {
           'bg-red-600 hover:bg-red-500': variant === 'red'
         }
       )}
-      disabled={isLoading || disabled}
+      disabled={disabled}
       {...rest}
     >
       {children}
-      {isLoading && <LoadingDots className="bg-white" />}
     </button>
   );
 };
