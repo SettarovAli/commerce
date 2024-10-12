@@ -1,16 +1,18 @@
 'use client';
 
-import { verifyEmail } from '@/lib/firebase/auth/email';
-import { Routes } from '@/routes';
+import { handleAuthActionResult } from '@/lib/firebase/auth/utils/handle-auth-action-result';
+import { authService } from 'lib/firebase/auth/service';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { Routes } from 'routes';
 
 const VerifyEmail = () => {
   const router = useRouter();
 
   useEffect(() => {
     const verifyActionCode = async (actionCode: string) => {
-      await verifyEmail(actionCode);
+      const authActionResult = await authService.verifyEmail(actionCode);
+      handleAuthActionResult({ authActionResult });
       router.push(Routes.SignIn);
     };
 
