@@ -1,10 +1,23 @@
 'use client';
 
-import { signInUserWithGoogle } from '@/lib/firebase/auth/google';
+import { authService } from 'lib/firebase/auth/service';
+import { handleAuthActionResult } from 'lib/firebase/auth/utils/handle-auth-action-result';
 import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
+import { Routes } from 'routes';
 
 const SignInWithGoogle = () => {
   const router = useRouter();
+
+  const handleSignIn = useCallback(async () => {
+    const authActionResult = await authService.signInWithGoogle();
+    handleAuthActionResult({
+      authActionResult,
+      onSuccess: () => {
+        router.push(Routes.Home);
+      }
+    });
+  }, [router]);
 
   return (
     <>
@@ -18,10 +31,7 @@ const SignInWithGoogle = () => {
           </div>
         </div>
       </div>
-      <div
-        className="mt-6 grid cursor-pointer grid-cols-1"
-        onClick={() => signInUserWithGoogle(router)}
-      >
+      <div className="mt-6 grid cursor-pointer grid-cols-1" onClick={handleSignIn}>
         <a className="flex w-full items-center justify-center gap-3 rounded-md bg-[#020202] px-3 py-1.5 text-white hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#020202]">
           <svg fill="currentColor" className="h-5 w-5" viewBox="0 0 210 210">
             <path
