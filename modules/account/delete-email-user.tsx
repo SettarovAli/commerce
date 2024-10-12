@@ -1,52 +1,31 @@
-import Button from '@/components/button';
-import Input from '@/components/input';
-import { deleteUserFromFirestore } from '@/lib/firebase/auth/delete-user';
-import { ValidationError, ValidationFields, handleValidation } from '@/lib/zod';
+import Input from 'components/input';
+import SubmitButton from 'components/submit-button';
+import { useAuthAction } from 'hooks/use-auth-action';
+import { deleteEmailUserAction } from 'lib/firebase/auth/server-actions';
+import { authService } from 'lib/firebase/auth/service';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { z } from 'zod';
+import { Routes } from 'routes';
 
-const Schema = z.object({
-  password: ValidationFields.PASSWORD
-});
+type AuthActionData = Record<'password', string>;
 
 const DeleteEmailUser: React.FC = () => {
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<ValidationError<typeof Schema>>({});
-
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleValidation({
-      data: { password },
-      schema: Schema,
-      onError: setErrors,
-      onSuccess: (res) => {
-        deleteUserFromFirestore(router, setIsLoading, res.password);
-        setErrors({});
-      }
-    });
-  };
+  const { action, errors } = useAuthAction({
+    authAction: deleteEmailUserAction,
+    clientAction: async (data: AuthActionData) => {
+      return await authService.deleteEmailUser(data.password);
+    },
+    onSuccess: () => {
+      router.push(Routes.SignIn);
+    }
+  });
 
   return (
-    <form
-      className="mt-4 flex flex-col gap-4 text-sm text-gray-500"
-      onSubmit={handleSubmit}
-      noValidate
-    >
+    <form className="mt-4 flex flex-col gap-4 text-sm text-gray-500" action={action} noValidate>
       Please enter your password to delete your account:
-      <Input
-        label="Password"
-        name="password"
-        value={password}
-        onChange={setPassword}
-        error={errors.password}
-      />
-      <Button type="submit" isLoading={isLoading} variant="red">
-        Confirm delete
-      </Button>
+      <Input type="password" name="password" label="Password" errors={errors.password} />
+      <SubmitButton variant="red">Confirm delete</SubmitButton>
     </form>
   );
 };
