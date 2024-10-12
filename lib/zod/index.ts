@@ -32,3 +32,23 @@ export const handleValidation = <T extends ZObjectType>(
     data: validatedFields.data
   };
 };
+
+export const validateFormData = (
+  formData: FormData,
+  schema: z.ZodSchema,
+  fields: Record<string, string>
+) => {
+  const data = Object.keys(fields).reduce(
+    (acc, key) => {
+      const value = fields[key];
+      if (value) acc[key] = formData.get(value);
+      return acc;
+    },
+    {} as Record<string, unknown>
+  );
+
+  return handleValidation({
+    data,
+    schema
+  });
+};
