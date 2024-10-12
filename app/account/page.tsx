@@ -2,6 +2,7 @@
 
 import LoadingDots from '@/components/loading-dots';
 import { auth } from '@/lib/firebase';
+import { checkUserProvider } from '@/lib/firebase/auth/utils/check-user-provider';
 import ChangeEmail from '@/modules/account/change-email';
 import ChangePassword from '@/modules/account/change-password';
 import DeleteUser from '@/modules/account/delete-user';
@@ -19,7 +20,7 @@ export default function AccountLayout() {
       </div>
     );
 
-  const isGoogleUser = user?.providerData[0]?.providerId === 'google.com';
+  const { isEmailUser } = checkUserProvider();
 
   return (
     <AuthUser>
@@ -28,9 +29,9 @@ export default function AccountLayout() {
           <h2 className="text-2xl font-bold leading-7 sm:text-3xl">My Account</h2>
           {user && <h3 className="text-lg font-bold sm:text-xl">{user.email}</h3>}
           <SignOut />
-          {user && !isGoogleUser && (
+          {user && isEmailUser && (
             <>
-              <ChangeEmail user={user} />
+              <ChangeEmail />
               <ChangePassword />
             </>
           )}

@@ -2,6 +2,7 @@
 
 import LoadingDots from '@/components/loading-dots';
 import { auth } from '@/lib/firebase';
+import { checkUserProvider } from '@/lib/firebase/auth/utils/check-user-provider';
 import { Routes } from '@/routes';
 import { ArrowRightEndOnRectangleIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
@@ -11,7 +12,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 const SignIn: React.FC = () => {
   const [user, loading] = useAuthState(auth);
 
-  const isGoogleUser = user?.providerData[0]?.providerId === 'google.com';
+  const { isGoogleUser } = checkUserProvider();
 
   if (loading) {
     return <LoadingDots className="bg-black dark:bg-white" />;
