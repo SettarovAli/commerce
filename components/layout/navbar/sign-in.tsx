@@ -1,16 +1,15 @@
 'use client';
 
-import LoadingDots from '@/components/loading-dots';
-import { auth } from '@/lib/firebase';
-import { checkUserProvider } from '@/lib/firebase/auth/utils/check-user-provider';
-import { Routes } from '@/routes';
 import { ArrowRightEndOnRectangleIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import LoadingDots from 'components/loading-dots';
+import { useAuthContext } from 'lib/firebase/auth/context';
+import { checkUserProvider } from 'lib/firebase/auth/utils/check-user-provider';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { Routes } from 'routes';
 
 const SignIn: React.FC = () => {
-  const [user, loading] = useAuthState(auth);
+  const { user, loading, isGuest } = useAuthContext();
 
   const { isGoogleUser } = checkUserProvider();
 
@@ -18,7 +17,7 @@ const SignIn: React.FC = () => {
     return <LoadingDots className="bg-black dark:bg-white" />;
   }
 
-  if (!user || !user?.emailVerified) {
+  if (isGuest) {
     return (
       <Link href={Routes.SignIn} className="flex shrink-0 items-center gap-1 hover:opacity-70">
         <span className="hidden sm:block">Log in</span>
@@ -30,7 +29,7 @@ const SignIn: React.FC = () => {
   return (
     <Link href={Routes.Account} className="flex items-center gap-1 hover:opacity-70">
       <span className="hidden sm:block">Account</span>
-      {isGoogleUser && user.photoURL ? (
+      {isGoogleUser && user?.photoURL ? (
         <span className="relative h-8 w-8 overflow-hidden rounded-full">
           <Image src={user.photoURL} alt="User avatar" fill />
         </span>
