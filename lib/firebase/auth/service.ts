@@ -7,6 +7,7 @@ import {
   confirmPasswordReset,
   createUserWithEmailAndPassword,
   deleteUser,
+  onAuthStateChanged,
   reauthenticateWithCredential,
   reauthenticateWithPopup,
   sendEmailVerification,
@@ -26,6 +27,10 @@ import { withAuthErrors } from 'lib/firebase/auth/utils/with-auth-errors';
 class AuthService {
   getCurrentUser(): User | null {
     return auth.currentUser;
+  }
+
+  onAuthChange(callback: (user: User | null) => void) {
+    return onAuthStateChanged(auth, callback);
   }
 
   async signUp(name: string, email: string, password: string) {
