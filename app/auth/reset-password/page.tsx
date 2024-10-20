@@ -1,6 +1,6 @@
 'use client';
 
-import LoadingDots from 'components/loading-dots';
+import Loading from 'components/loading';
 import { authService } from 'lib/firebase/auth/service';
 import ResetPasswordForm from 'modules/reset-password/reset-password-form';
 import { useRouter } from 'next/navigation';
@@ -37,13 +37,7 @@ const ResetPassword = () => {
     setActionCode(actionCode);
   }, [router]);
 
-  if (!isVerified && !error) {
-    return (
-      <div className="flex justify-center">
-        <LoadingDots className="h-3 w-3 bg-black dark:bg-white" />
-      </div>
-    );
-  }
+  if (!isVerified && !error) return <Loading />;
 
   return (
     <>

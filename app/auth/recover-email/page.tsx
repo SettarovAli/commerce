@@ -1,6 +1,6 @@
 'use client';
 
-import LoadingDots from 'components/loading-dots';
+import Loading from 'components/loading';
 import { authService } from 'lib/firebase/auth/service';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -27,13 +27,7 @@ const RecoverEmail = () => {
     recover(actionCode);
   }, [router]);
 
-  if (!message) {
-    return (
-      <div className="flex justify-center">
-        <LoadingDots className="h-3 w-3 bg-black dark:bg-white" />
-      </div>
-    );
-  }
+  if (!message) return <Loading />;
 
   return (
     <>
