@@ -22,7 +22,7 @@ const DeleteEmailUser: React.FC = () => {
   });
 
   return (
-    <form className="mt-4 flex flex-col gap-4 text-sm text-gray-500" action={action} noValidate>
+    <form className="flex flex-col gap-4" action={action} noValidate>
       Please enter your password to delete your account:
       <Input type="password" name="password" label="Password" errors={errors.password} />
       <SubmitButton variant="red">Confirm delete</SubmitButton>

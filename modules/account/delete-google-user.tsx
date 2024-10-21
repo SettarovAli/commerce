@@ -19,11 +19,9 @@ const DeleteGoogleUser: React.FC = () => {
   }, [router]);
 
   return (
-    <div className="mt-4 flex flex-col gap-4 text-sm text-gray-500">
-      <Button type="button" onClick={handleDeleteGoogleUser} variant="red">
-        Confirm delete
-      </Button>
-    </div>
+    <Button type="button" onClick={handleDeleteGoogleUser} variant="red">
+      Confirm delete
+    </Button>
   );
 };
 

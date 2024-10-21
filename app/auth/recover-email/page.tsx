@@ -31,7 +31,7 @@ const RecoverEmail = () => {
 
   return (
     <>
-      <h2 className="mb-4 mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
+      <h2 className="mb-4 mt-8 text-2xl font-bold leading-9 tracking-tight">
         Restoring email address
       </h2>
       {message && <p>{message}</p>}

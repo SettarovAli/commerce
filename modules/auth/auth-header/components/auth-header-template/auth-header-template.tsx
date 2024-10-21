@@ -13,8 +13,8 @@ const AuthHeaderTemplate: React.FC<Props> = (props) => {
 
   return (
     <>
-      <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">{headline}</h2>
-      <p className="mb-4 mt-2 text-sm leading-6 text-gray-500">
+      <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight">{headline}</h2>
+      <p className="mb-4 mt-2 text-sm leading-6">
         {question}
         <Link
           href={linkHref}

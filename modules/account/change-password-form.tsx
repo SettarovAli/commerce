@@ -24,7 +24,7 @@ const ChangePasswordForm: React.FC<Props> = (props) => {
   });
 
   return (
-    <form className="mt-4 flex flex-col gap-4 text-sm text-gray-500" action={action} noValidate>
+    <form className="flex flex-col gap-4" action={action} noValidate>
       Please enter your password to delete your account:
       <Input type="password" name="password" label="Current Password" errors={errors.password} />
       <Input type="password" name="new-password" label="New Password" errors={errors.newPassword} />
