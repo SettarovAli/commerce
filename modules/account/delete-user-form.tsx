@@ -3,14 +3,9 @@ import DeleteEmailUser from '@/modules/account/delete-email-user';
 import DeleteGoogleUser from '@/modules/account/delete-google-user';
 
 const DeleteUserForm: React.FC = () => {
-  const { isEmailUser, isGoogleUser } = checkUserProvider();
+  const { isEmailUser } = checkUserProvider();
 
-  return (
-    <>
-      {isEmailUser && <DeleteEmailUser />}
-      {isGoogleUser && <DeleteGoogleUser />}
-    </>
-  );
+  return isEmailUser ? <DeleteEmailUser /> : <DeleteGoogleUser />;
 };
 
 export default DeleteUserForm;
