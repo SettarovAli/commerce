@@ -12,5 +12,17 @@ export default {
         hostname: '**.googleusercontent.com'
       }
     ]
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/admin',
+        destination: `${process.env.ADMIN_DOMAIN}/admin`
+      },
+      {
+        source: '/admin/:path+',
+        destination: `${process.env.ADMIN_DOMAIN}/admin/:path+`
+      }
+    ];
   }
 };
