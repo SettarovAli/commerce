@@ -53,7 +53,7 @@ export async function Navbar() {
             <Search />
           </Suspense>
         </div>
-        <div className="flex justify-end md:w-1/3">
+        <div className="flex justify-end gap-1 md:w-1/3 md:gap-2">
           <SignIn />
           <CartModal />
         </div>
