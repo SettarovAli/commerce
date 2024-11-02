@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableBody,
-  Table
-} from '@/components/ui/table';
+import { TableHead, TableRow, TableHeader, TableBody, Table } from '@/components/ui/table';
 import {
   Card,
   CardContent,
@@ -45,9 +39,7 @@ export function ProductsTable({
     <Card>
       <CardHeader>
         <CardTitle>Products</CardTitle>
-        <CardDescription>
-          Manage your products and view their sales performance.
-        </CardDescription>
+        <CardDescription>Manage your products and view their sales performance.</CardDescription>
       </CardHeader>
       <CardContent>
         <Table>
@@ -59,9 +51,7 @@ export function ProductsTable({
               <TableHead>Name</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="hidden md:table-cell">Price</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Total Sales
-              </TableHead>
+              <TableHead className="hidden md:table-cell">Total Sales</TableHead>
               <TableHead className="hidden md:table-cell">Created at</TableHead>
               <TableHead>
                 <span className="sr-only">Actions</span>
@@ -76,7 +66,7 @@ export function ProductsTable({
         </Table>
       </CardContent>
       <CardFooter>
-        <form className="flex items-center w-full justify-between">
+        <form className="flex w-full items-center justify-between">
           <div className="text-xs text-muted-foreground">
             Showing{' '}
             <strong>

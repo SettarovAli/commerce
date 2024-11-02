@@ -18,11 +18,7 @@ export async function User() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="overflow-hidden rounded-full"
-        >
+        <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
           <Image
             src={user?.image ?? '/placeholder-user.jpg'}
             width={36}

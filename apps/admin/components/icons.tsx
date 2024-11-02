@@ -62,9 +62,9 @@ export function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export function Spinner() {
   return (
-    <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center">
+    <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center">
       <svg
-        className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-700"
+        className="-ml-1 mr-3 h-5 w-5 animate-spin text-gray-700"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -110,17 +110,8 @@ export function Logo() {
 
 export function VercelLogo(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      {...props}
-      aria-label="Vercel logomark"
-      height="64"
-      role="img"
-      viewBox="0 0 74 64"
-    >
-      <path
-        d="M37.5896 0.25L74.5396 64.25H0.639648L37.5896 0.25Z"
-        fill="currentColor"
-      ></path>
+    <svg {...props} aria-label="Vercel logomark" height="64" role="img" viewBox="0 0 74 64">
+      <path d="M37.5896 0.25L74.5396 64.25H0.639648L37.5896 0.25Z" fill="currentColor"></path>
     </svg>
   );
 }
