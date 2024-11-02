@@ -1,14 +1,26 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "dev": {
+      "persistent": true,
+      "cache": false
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
-    "dev": {
-      "persistent": true,
-      "cache": false
+    "start": {
+      "dependsOn": ["^start"]
+    },
+    "type:check": {
+      "dependsOn": ["^type:check"]
+    },
+    "prettier": {
+      "dependsOn": ["^prettier"]
+    },
+    "prettier:check": {
+      "dependsOn": ["^prettier:check"]
     }
   }
 }
