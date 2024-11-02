@@ -20,7 +20,7 @@ const SignOut = () => {
 
   return (
     <div className="space-y-12">
-      <div className="grid grid-cols-1 gap-x-8 gap-y-2 border-b  pb-12 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-x-8 gap-y-2 border-b pb-12 md:grid-cols-3">
         <div>
           <h2 className="text-base font-semibold leading-7">Sign Out</h2>
         </div>
