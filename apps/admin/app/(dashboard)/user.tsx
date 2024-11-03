@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
+import userAvatar from 'public/placeholder-user.jpg';
 
 export async function User() {
   let session = await auth();
@@ -20,7 +21,7 @@ export async function User() {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
           <Image
-            src={user?.image ?? '/placeholder-user.jpg'}
+            src={user?.image ?? userAvatar}
             width={36}
             height={36}
             alt="Avatar"
