@@ -4,7 +4,11 @@ import './globals.css';
 const { SITE_NAME } = process.env;
 
 export const metadata = {
-  title: `Admin | ${SITE_NAME}`
+  title: `Admin | ${SITE_NAME}`,
+  robots: {
+    follow: false,
+    index: false
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
