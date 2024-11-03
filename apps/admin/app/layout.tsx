@@ -1,11 +1,10 @@
+import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 
-import { Analytics } from '@vercel/analytics/react';
+const { SITE_NAME } = process.env;
 
 export const metadata = {
-  title: 'Next.js App Router + NextAuth + Tailwind CSS',
-  description:
-    'A user admin dashboard configured with Next.js, Postgres, NextAuth, Tailwind CSS, TypeScript, and Prettier.'
+  title: `Admin | ${SITE_NAME}`
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
