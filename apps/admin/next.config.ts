@@ -1,5 +1,5 @@
 export default {
-  basePath: '/admin',
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   images: {
     remotePatterns: [
       {

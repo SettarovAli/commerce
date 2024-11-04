@@ -1,3 +1,5 @@
+const { ADMIN_DOMAIN, ADMIN_DOMAIN_BASE_PATH } = process.env;
+
 export default {
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -16,12 +18,12 @@ export default {
   async rewrites() {
     return [
       {
-        source: '/admin',
-        destination: `${process.env.ADMIN_DOMAIN}/admin`
+        source: ADMIN_DOMAIN_BASE_PATH,
+        destination: `${ADMIN_DOMAIN}${ADMIN_DOMAIN_BASE_PATH}`
       },
       {
-        source: '/admin/:path+',
-        destination: `${process.env.ADMIN_DOMAIN}/admin/:path+`
+        source: `${ADMIN_DOMAIN_BASE_PATH}/:path+`,
+        destination: `${ADMIN_DOMAIN}${ADMIN_DOMAIN_BASE_PATH}/:path+`
       }
     ];
   }

@@ -15,5 +15,6 @@ namespace NodeJS {
     NEXT_PUBLIC_FIREBASE_APP_ID: string;
 
     ADMIN_DOMAIN: string;
+    ADMIN_DOMAIN_BASE_PATH: string;
   }
 }
