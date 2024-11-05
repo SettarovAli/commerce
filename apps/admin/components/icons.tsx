@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+
 export function UsersIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -60,11 +62,16 @@ export function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-export function Spinner() {
+export function Spinner(props: { variant?: 'light' | 'dark' }) {
+  const { variant = 'dark' } = props;
+
   return (
     <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center">
       <svg
-        className="-ml-1 mr-3 h-5 w-5 animate-spin text-gray-700"
+        className={cn('-ml-1 mr-3 h-5 w-5 animate-spin', {
+          white: variant === 'light',
+          'text-gray-700': variant === 'dark'
+        })}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
