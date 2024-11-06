@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { decrypt } from 'lib/auth/session';
-import { getConfig } from 'lib/utils/get-config';
+
+import { decrypt } from '@/lib/auth/session';
+import { getConfig } from '@/lib/utils/get-config';
 import { Routes } from 'routes';
 
 const publicRoutes = [Routes.SignIn];
@@ -16,6 +17,10 @@ export default async function middleware(req: NextRequest) {
 
     const sessionCookie = (await cookies()).get('session')?.value;
     const session = await decrypt(sessionCookie);
+
+    if (isPublicRoute && session?.userId) {
+      return NextResponse.redirect(new URL(`${basePath}${Routes.Home}`, req.nextUrl));
+    }
 
     if (!isPublicRoute && !session?.userId) {
       return NextResponse.redirect(new URL(`${basePath}${Routes.SignIn}`, req.nextUrl));
