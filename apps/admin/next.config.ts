@@ -1,5 +1,7 @@
+const { NEXT_PUBLIC_BASE_PATH, STORE_HOST } = process.env;
+
 export default {
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH,
+  basePath: NEXT_PUBLIC_BASE_PATH,
   images: {
     remotePatterns: [
       {
@@ -11,5 +13,10 @@ export default {
         hostname: '*.public.blob.vercel-storage.com'
       }
     ]
+  },
+  experimental: {
+    serverActions: {
+      allowedOrigins: [STORE_HOST]
+    }
   }
 };
