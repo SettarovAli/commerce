@@ -40,8 +40,6 @@ export const createSession = async (userId: string) => {
     sameSite: 'lax',
     path: '/'
   });
-
-  redirect(Routes.Home);
 };
 
 export const verifySession = async () => {
