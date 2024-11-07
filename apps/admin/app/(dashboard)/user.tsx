@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import Image from 'next/image';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -10,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { signOutAction } from '@/lib/auth/actions';
 import userAvatar from 'public/placeholder-user.jpg';
+import { Routes } from '@/routes';
 
 export async function User() {
   return (
@@ -28,10 +31,16 @@ export async function User() {
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuItem>
-          <form action={signOutAction}>
-            <button type="submit">Sign Out</button>
+          <Link href={Routes.Profile} className="flex-1">
+            Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <form action={signOutAction} className="w-full">
+            <button type="submit" className="w-full text-left">
+              Sign Out
+            </button>
           </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
