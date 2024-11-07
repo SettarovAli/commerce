@@ -4,7 +4,7 @@ import { get, ref } from 'firebase/database';
 import bcrypt from 'bcrypt';
 
 import { db } from '@/lib/firebase';
-import { deleteSession, verifySession } from '@/lib/auth/session';
+import { createSession, deleteSession, verifySession } from '@/lib/auth/session';
 import { SignInSchema } from '@/lib/auth/schemas';
 import { User } from '@/lib/auth/types';
 
@@ -22,8 +22,7 @@ class AuthService {
   }
 
   static async signIn({ email, password }: SignInSchema): Promise<{
-    userId: string;
-    userData: User;
+    message: string;
   }> {
     const usersRef = ref(db, 'users');
     const usersSnapshot = await get(usersRef);
@@ -43,14 +42,16 @@ class AuthService {
       throw new Error('User not found');
     }
 
-    const { password: hashedPassword } = userData as User;
+    const { password: hashedPassword, name } = userData as User;
 
     const isPasswordValid = await bcrypt.compare(password, hashedPassword);
     if (!isPasswordValid) {
       throw new Error('Invalid credentials');
     }
 
-    return { userId, userData };
+    await createSession(userId);
+
+    return { message: `Hello, ${name}!` };
   }
 
   static async signOut() {
