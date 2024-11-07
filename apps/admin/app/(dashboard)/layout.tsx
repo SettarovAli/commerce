@@ -70,7 +70,7 @@ function DesktopNav() {
           <Package className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href="/customers" label="Customers">
+        <NavItem href={Routes.Customers} label="Customers">
           <Users2 className="h-5 w-5" />
         </NavItem>
 
@@ -133,7 +133,7 @@ function MobileNav() {
             Products
           </Link>
           <Link
-            href="#"
+            href={Routes.Customers}
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Users2 className="h-5 w-5" />
