@@ -4,11 +4,23 @@ import { get, ref } from 'firebase/database';
 import bcrypt from 'bcrypt';
 
 import { db } from '@/lib/firebase';
-import { deleteSession } from '@/lib/auth/session';
+import { deleteSession, verifySession } from '@/lib/auth/session';
 import { SignInSchema } from '@/lib/auth/schemas';
 import { User } from '@/lib/auth/types';
 
 class AuthService {
+  static async getCurrentUserData(): Promise<User | undefined> {
+    const { userId } = await verifySession();
+    const userRef = ref(db, `users/${userId}`);
+    const snapshot = await get(userRef);
+
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      await deleteSession();
+    }
+  }
+
   static async signIn({ email, password }: SignInSchema): Promise<{
     userId: string;
     userData: User;
