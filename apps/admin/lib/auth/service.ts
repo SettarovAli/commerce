@@ -1,9 +1,7 @@
 import 'server-only';
 
-import { get, ref } from 'firebase/database';
 import bcrypt from 'bcrypt';
-
-import { db } from '@/lib/firebase';
+import { UsersService } from '@/lib/users/service';
 import { createSession, deleteSession, verifySession } from '@/lib/auth/session';
 import { SignInSchema } from '@/lib/auth/schemas';
 import { User } from '@/lib/auth/types';
@@ -11,38 +9,42 @@ import { User } from '@/lib/auth/types';
 class AuthService {
   static async getCurrentUserData(): Promise<User | undefined> {
     const { userId } = await verifySession();
-    const userRef = ref(db, `users/${userId}`);
-    const snapshot = await get(userRef);
+    const { userRef } = UsersService.getUserRef(userId);
+    const { userSnapshot, isUserSnapshotExists } = await UsersService.getUserSnapshot(userRef);
 
-    if (snapshot.exists()) {
-      return snapshot.val();
+    if (isUserSnapshotExists) {
+      return userSnapshot.val();
     } else {
       await deleteSession();
     }
   }
 
-  static async signIn({ email, password }: SignInSchema): Promise<{
-    message: string;
-  }> {
-    const usersRef = ref(db, 'users');
-    const usersSnapshot = await get(usersRef);
+  static async signIn(schema: SignInSchema): Promise<{ message: string }> {
+    const { email, password } = schema;
 
     let userId: string | null = null;
     let userData: User | null = null;
 
-    usersSnapshot.forEach((snapshot) => {
-      const data = snapshot.val();
-      if (data.email === email) {
-        userId = snapshot.key;
-        userData = data;
-      }
-    });
+    const { emailRef } = UsersService.getEmailRef(email);
+    const { emailSnapshot, isEmailSnapshotExists } = await UsersService.getEmailSnapshot(emailRef);
+
+    if (!isEmailSnapshotExists) {
+      throw new Error('User not found');
+    }
+
+    const { userRef } = UsersService.getUserRef(emailSnapshot.val());
+    const { userSnapshot, isUserSnapshotExists } = await UsersService.getUserSnapshot(userRef);
+
+    if (isUserSnapshotExists) {
+      userId = userSnapshot.key;
+      userData = userSnapshot.val();
+    }
 
     if (!userData || !userId) {
       throw new Error('User not found');
     }
 
-    const { password: hashedPassword, name } = userData as User;
+    const { password: hashedPassword, name } = userData;
 
     const isPasswordValid = await bcrypt.compare(password, hashedPassword);
     if (!isPasswordValid) {
