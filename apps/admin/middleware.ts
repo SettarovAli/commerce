@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSessionData } from '@/lib/auth/session';
+import { getSessionDataFromMiddleware, updateSessionFromMiddleware } from '@/lib/auth/session';
 import { getConfig } from '@/lib/utils/get-config';
 import { Routes } from 'routes';
 
@@ -13,7 +13,7 @@ export default async function middleware(req: NextRequest) {
 
     const isPublicRoute = publicRoutes.includes(pathname as Routes);
 
-    const { sessionPayload } = await getSessionData();
+    const { sessionPayload } = await getSessionDataFromMiddleware(req);
     const userId = sessionPayload?.userId;
 
     if (isPublicRoute && userId) {
@@ -24,7 +24,13 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(`${basePath}${Routes.SignIn}`, req.nextUrl));
     }
 
-    return NextResponse.next();
+    const res = NextResponse.next();
+
+    if (userId) {
+      await updateSessionFromMiddleware(req, res);
+    }
+
+    return res;
   } catch (error: unknown) {
     console.error(error);
   }
