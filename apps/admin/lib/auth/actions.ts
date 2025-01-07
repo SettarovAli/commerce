@@ -7,7 +7,7 @@ import { AuthService } from '@/lib/auth/service';
 
 export const signInAction = actionClient
   .schema(signInSchema, {
-    handleValidationErrorsShape: (ve) => flattenValidationErrors(ve).fieldErrors
+    handleValidationErrorsShape: async (ve) => flattenValidationErrors(ve).fieldErrors
   })
   .action(async ({ parsedInput }) => {
     const res = await AuthService.signIn(parsedInput);

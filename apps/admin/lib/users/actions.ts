@@ -7,7 +7,7 @@ import { UsersService } from '@/lib/users/service';
 
 export const createUserAction = actionClient
   .schema(createUserSchema, {
-    handleValidationErrorsShape: (ve) => flattenValidationErrors(ve).fieldErrors
+    handleValidationErrorsShape: async (ve) => flattenValidationErrors(ve).fieldErrors
   })
   .action(async ({ parsedInput }) => {
     const res = await UsersService.createUser(parsedInput);
