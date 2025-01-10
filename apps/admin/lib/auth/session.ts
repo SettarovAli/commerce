@@ -3,6 +3,7 @@ import 'server-only';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import { cache } from 'react';
 import { SignJWT, jwtVerify } from 'jose';
 import {
   Session,
@@ -94,7 +95,7 @@ export const createSessionFromMiddleware = async (
   setSessionFromMiddleware(res, session, expiresAt);
 };
 
-export const verifySession = async (): Promise<{ userId: string }> => {
+export const verifySession = cache(async (): Promise<SessionDataPayload> => {
   const { sessionPayload } = await getSessionData();
   const userId = sessionPayload?.userId;
 
@@ -102,8 +103,8 @@ export const verifySession = async (): Promise<{ userId: string }> => {
     redirect(Routes.SignIn);
   }
 
-  return { userId };
-};
+  return sessionPayload;
+});
 
 export const updateSession = async (): Promise<void> => {
   const { session, sessionPayload } = await getSessionData();
