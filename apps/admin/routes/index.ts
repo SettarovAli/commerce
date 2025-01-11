@@ -4,5 +4,7 @@ export enum Routes {
   Profile = '/profile',
   Products = '/products',
   Customers = '/customers',
-  Users = '/users'
+  Users = '/users',
+  Forbidden = '/403',
+  ServerError = '/500'
 }
