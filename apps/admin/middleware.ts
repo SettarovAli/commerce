@@ -1,20 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSessionDataFromMiddleware, updateSessionFromMiddleware } from '@/lib/auth/session';
+
 import { getConfig } from '@/lib/utils/get-config';
+import { getSessionDataFromMiddleware, updateSessionFromMiddleware } from '@/lib/auth/session';
+import { UserRole } from '@/lib/auth/types';
 import { Routes } from 'routes';
 
 const publicRoutes = [Routes.SignIn];
+const adminRoutes = [Routes.Users];
 
 export default async function middleware(req: NextRequest) {
+  const { basePath } = getConfig();
+
   try {
     const { pathname } = req.nextUrl;
 
-    const { basePath } = getConfig();
-
     const isPublicRoute = publicRoutes.includes(pathname as Routes);
+    const isAdminRoute = adminRoutes.includes(pathname as Routes);
 
     const { sessionPayload } = await getSessionDataFromMiddleware(req);
     const userId = sessionPayload?.userId;
+    const userRole = sessionPayload?.userRole;
 
     if (isPublicRoute && userId) {
       return NextResponse.redirect(new URL(`${basePath}${Routes.Home}`, req.nextUrl));
@@ -22,6 +27,12 @@ export default async function middleware(req: NextRequest) {
 
     if (!isPublicRoute && !userId) {
       return NextResponse.redirect(new URL(`${basePath}${Routes.SignIn}`, req.nextUrl));
+    }
+
+    if (isAdminRoute && userRole !== UserRole.ADMIN) {
+      return NextResponse.rewrite(new URL(`${basePath}${Routes.Forbidden}`, req.nextUrl), {
+        status: 403
+      });
     }
 
     const res = NextResponse.next();
@@ -33,6 +44,7 @@ export default async function middleware(req: NextRequest) {
     return res;
   } catch (error: unknown) {
     console.error(error);
+    return NextResponse.rewrite(new URL(`${basePath}${Routes.ServerError}`, req.nextUrl));
   }
 }
 
