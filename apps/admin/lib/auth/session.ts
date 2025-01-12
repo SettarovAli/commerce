@@ -59,7 +59,7 @@ export const encryptSession = async (payload: SessionPayload): Promise<string> =
     .sign(key);
 };
 
-const decryptSession = async (session: string = ''): Promise<SessionDataPayload | null> => {
+export const decryptSession = async (session: string = ''): Promise<SessionDataPayload | null> => {
   try {
     const { payload } = await jwtVerify(session, key, {
       algorithms: ['HS256']
