@@ -2,7 +2,7 @@ import 'server-only';
 
 import bcrypt from 'bcrypt';
 import { UsersService } from '@/lib/users/service';
-import { createSession, deleteSession, verifySession } from '@/lib/auth/session';
+import { deleteSession, encryptSession, setSession, verifySession } from '@/lib/auth/session';
 import { SignInSchema } from '@/lib/auth/schemas';
 import { User } from '@/lib/auth/types';
 
@@ -19,7 +19,7 @@ class AuthService {
     }
   }
 
-  static async signIn(schema: SignInSchema): Promise<{ message: string }> {
+  static async getSession(schema: SignInSchema): Promise<string> {
     const { email, password } = schema;
 
     let userId: string | null = null;
@@ -44,16 +44,21 @@ class AuthService {
       throw new Error('User not found');
     }
 
-    const { password: hashedPassword, name } = userData;
+    const { password: hashedPassword, role } = userData;
 
     const isPasswordValid = await bcrypt.compare(password, hashedPassword);
     if (!isPasswordValid) {
       throw new Error('Invalid credentials');
     }
 
-    await createSession(userId);
+    const session = await encryptSession({ userId, userRole: role });
 
-    return { message: `Hello, ${name}!` };
+    return session;
+  }
+
+  static async signIn(schema: SignInSchema): Promise<void> {
+    const session = await this.getSession(schema);
+    await setSession(session);
   }
 
   static async signOut() {

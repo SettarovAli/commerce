@@ -40,7 +40,7 @@ class UsersService {
     return { emailSnapshot, isEmailSnapshotExists };
   }
 
-  static async createUser({ name, email, password }: CreateUserSchema): Promise<{
+  static async createUser({ name, email, password, role }: CreateUserSchema): Promise<{
     message: string;
   }> {
     const { emailRef } = this.getEmailRef(email);
@@ -59,7 +59,8 @@ class UsersService {
       createdAt: Date.now(),
       name,
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      role
     });
 
     await set(emailRef, userId);

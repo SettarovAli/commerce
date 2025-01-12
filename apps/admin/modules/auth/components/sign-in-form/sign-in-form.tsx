@@ -23,8 +23,7 @@ const SignInForm = () => {
         defaultValues: { email: '', password: '' }
       },
       actionProps: {
-        onSuccess: ({ data }) => {
-          toast.success(data?.message);
+        onSuccess: () => {
           router.push(Routes.Home);
         },
         onError: ({ error }) => {

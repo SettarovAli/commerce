@@ -1,17 +1,24 @@
 import { JWTPayload } from 'jose';
 
+export enum UserRole {
+  VIEWER = 'viewer',
+  EDITOR = 'editor',
+  ADMIN = 'admin'
+}
+
 export type User = {
   createdAt: number;
   email: string;
   name: string;
   password: string;
+  role: UserRole;
 };
 
 export type Session = string | undefined;
 
 export type SessionPayload = {
   userId: string;
-  expiresAt: Date;
+  userRole: UserRole;
 };
 
 export type SessionDataPayload = JWTPayload & SessionPayload;
