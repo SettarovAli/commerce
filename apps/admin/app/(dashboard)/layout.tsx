@@ -22,6 +22,8 @@ import Providers from './providers';
 import { NavItem } from './nav-item';
 import { SearchInput } from './search';
 import { Routes } from '@/routes';
+import { verifySession } from '@/lib/auth/session';
+import { UserRole } from '@/lib/auth/types';
 
 const { SITE_NAME } = process.env;
 
@@ -47,7 +49,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   );
 }
 
-function DesktopNav() {
+async function DesktopNav() {
+  const session = await verifySession();
+  const userRole = session?.userRole;
+
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
       <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
@@ -79,9 +84,11 @@ function DesktopNav() {
           <LineChart className="h-5 w-5" />
         </NavItem>
 
-        <NavItem href={Routes.Users} label="Users">
-          <UserSquare className="h-5 w-5" />
-        </NavItem>
+        {userRole === UserRole.ADMIN && (
+          <NavItem href={Routes.Users} label="Users">
+            <UserSquare className="h-5 w-5" />
+          </NavItem>
+        )}
       </nav>
       <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
         <Tooltip>
@@ -101,7 +108,10 @@ function DesktopNav() {
   );
 }
 
-function MobileNav() {
+async function MobileNav() {
+  const session = await verifySession();
+  const userRole = session?.userRole;
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -154,13 +164,15 @@ function MobileNav() {
             <LineChart className="h-5 w-5" />
             Analytics
           </Link>
-          <Link
-            href={Routes.Users}
-            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-          >
-            <UserSquare className="h-5 w-5" />
-            Users
-          </Link>
+          {userRole === UserRole.ADMIN && (
+            <Link
+              href={Routes.Users}
+              className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+            >
+              <UserSquare className="h-5 w-5" />
+              Users
+            </Link>
+          )}
         </nav>
       </SheetContent>
     </Sheet>
