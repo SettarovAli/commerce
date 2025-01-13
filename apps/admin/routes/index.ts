@@ -6,5 +6,5 @@ export enum Routes {
   Customers = '/customers',
   Users = '/users',
   Forbidden = '/403',
-  ServerError = '/500'
+  ServerError = '/error'
 }

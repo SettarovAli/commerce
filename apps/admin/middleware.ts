@@ -44,7 +44,9 @@ export default async function middleware(req: NextRequest) {
     return res;
   } catch (error: unknown) {
     console.error(error);
-    return NextResponse.rewrite(new URL(`${basePath}${Routes.ServerError}`, req.nextUrl));
+    return NextResponse.rewrite(new URL(`${basePath}${Routes.ServerError}`, req.nextUrl), {
+      status: 500
+    });
   }
 }
 

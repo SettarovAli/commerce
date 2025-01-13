@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function ServerErrorPage() {
+export default function ErrorPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>500 - Internal Server Error</CardTitle>
+        <CardTitle>Error</CardTitle>
       </CardHeader>
       <CardContent>Something went wrong.</CardContent>
     </Card>
