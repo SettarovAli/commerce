@@ -1,17 +1,18 @@
-import SignIn from '@/components/layout/navbar/sign-in';
-import CartModal from 'components/cart/modal';
-import LogoSquare from 'components/logo-square';
-import { getMenu } from 'lib/shopify';
-import { Menu } from 'lib/shopify/types';
 import Link from 'next/link';
 import { Suspense } from 'react';
+
+import SignIn from '@/components/layout/navbar/sign-in';
+import CartModal from '@/components/cart/modal';
+import LogoSquare from '@/components/logo-square';
 import MobileMenu from './mobile-menu';
 import Search, { SearchSkeleton } from './search';
+import { shopifyService } from '@/lib/shopify/services/shopify-service';
+import { Menu } from '@/lib/shopify/types';
 
 const { SITE_NAME } = process.env;
 
 export async function Navbar() {
-  const menu = await getMenu('next-js-frontend-header-menu');
+  const menu = await shopifyService.getMenu('next-js-frontend-header-menu');
 
   return (
     <nav className="relative flex items-center justify-between p-4 lg:px-6">
