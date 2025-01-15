@@ -1,15 +1,15 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 import FooterMenu from 'components/layout/footer-menu';
 import LogoSquare from 'components/logo-square';
-import { getMenu } from 'lib/shopify';
-import { Suspense } from 'react';
+import { shopifyService } from '@/lib/shopify/services/shopify-service';
 
 const { SITE_NAME } = process.env;
 
 export default async function Footer() {
   const skeleton = 'w-full h-6 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700';
-  const menu = await getMenu('next-js-frontend-footer-menu');
+  const menu = await shopifyService.getMenu('next-js-frontend-footer-menu');
 
   return (
     <footer className="text-sm text-neutral-500 dark:text-neutral-400">
