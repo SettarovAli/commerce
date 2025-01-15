@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import Prose from 'components/prose';
-import { getPage } from 'lib/shopify';
-import { notFound } from 'next/navigation';
+import { shopifyService } from '@/lib/shopify/services/shopify-service';
 
 export async function generateMetadata(props: {
   params: Promise<{ page: string }>;
 }): Promise<Metadata> {
   const params = await props.params;
-  const page = await getPage(params.page);
+  const page = await shopifyService.getPage(params.page);
 
   if (!page) return notFound();
 
@@ -25,7 +25,7 @@ export async function generateMetadata(props: {
 
 export default async function Page(props: { params: Promise<{ page: string }> }) {
   const params = await props.params;
-  const page = await getPage(params.page);
+  const page = await shopifyService.getPage(params.page);
 
   if (!page) return notFound();
 
