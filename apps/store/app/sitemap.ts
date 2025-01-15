@@ -1,7 +1,8 @@
-import { getCollections, getPages, getProducts } from 'lib/shopify';
+import { MetadataRoute } from 'next';
+
+import { shopifyService } from '@/lib/shopify/services/shopify-service';
 import { validateEnvironmentVariables } from 'lib/utils';
 import { getBaseUrl } from 'lib/utils/get-base-url';
-import { MetadataRoute } from 'next';
 
 type Route = {
   url: string;
@@ -20,21 +21,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: new Date().toISOString()
   }));
 
-  const collectionsPromise = getCollections().then((collections) =>
+  const collectionsPromise = shopifyService.getCollections().then((collections) =>
     collections.map((collection) => ({
       url: `${baseUrl}${collection.path}`,
       lastModified: collection.updatedAt
     }))
   );
 
-  const productsPromise = getProducts({}).then((products) =>
+  const productsPromise = shopifyService.getProducts({}).then((products) =>
     products.map((product) => ({
       url: `${baseUrl}/product/${product.handle}`,
       lastModified: product.updatedAt
     }))
   );
 
-  const pagesPromise = getPages().then((pages) =>
+  const pagesPromise = shopifyService.getPages().then((pages) =>
     pages.map((page) => ({
       url: `${baseUrl}/${page.handle}`,
       lastModified: page.updatedAt
