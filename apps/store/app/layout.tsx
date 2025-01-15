@@ -1,13 +1,14 @@
-import { CartProvider } from 'components/cart/cart-context';
-import { Navbar } from 'components/layout/navbar';
-import { GeistSans } from 'geist/font/sans';
-import AuthProvider from 'lib/firebase/auth/context';
-import { ToastContainer } from 'react-toastify';
-import { getBaseUrl } from 'lib/utils/get-base-url';
-import { getCart } from 'lib/shopify';
-import { ensureStartsWith } from 'lib/utils';
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
+import { GeistSans } from 'geist/font/sans';
+import { ToastContainer } from 'react-toastify';
+
+import { CartProvider } from '@/components/cart/cart-context';
+import { Navbar } from '@/components/layout/navbar';
+import AuthProvider from '@/lib/firebase/auth/context';
+import { getBaseUrl } from '@/lib/utils/get-base-url';
+import { ensureStartsWith } from '@/lib/utils';
+import { shopifyService } from '@/lib/shopify/services/shopify-service';
 import packageJson from '../package.json';
 import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -40,7 +41,7 @@ export const metadata = {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const cartId = (await cookies()).get('cartId')?.value;
   // Don't await the fetch, pass the Promise to the context provider
-  const cart = getCart(cartId);
+  const cart = shopifyService.getCart(cartId);
 
   return (
     <html lang="en" dir="ltr" className={GeistSans.variable}>
