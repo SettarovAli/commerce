@@ -13,14 +13,14 @@
     "start": {
       "dependsOn": ["^start"]
     },
+    "format:check": {
+      "dependsOn": ["^format:check"]
+    },
+    "format:fix": {
+      "dependsOn": ["^format:fix"]
+    },
     "type:check": {
       "dependsOn": ["^type:check"]
-    },
-    "prettier": {
-      "dependsOn": ["^prettier"]
-    },
-    "prettier:check": {
-      "dependsOn": ["^prettier:check"]
     }
   }
 }

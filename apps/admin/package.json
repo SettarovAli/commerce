@@ -6,8 +6,9 @@
     "dev": "next dev --turbopack --port 3001",
     "build": "next build",
     "start": "next start --port 3001",
-    "prettier": "prettier --write --ignore-unknown .",
-    "prettier:check": "prettier --check --ignore-unknown .",
+    "prettier": "prettier . --ignore-path .prettierignore",
+    "format:check": "pnpm run prettier --check",
+    "format:fix": "pnpm run prettier --write",
     "type:check": "npx tsc --noEmit"
   },
   "dependencies": {
