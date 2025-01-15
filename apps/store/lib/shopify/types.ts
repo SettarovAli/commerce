@@ -270,3 +270,5 @@ export type ShopifyProductsOperation = {
     sortKey?: string;
   };
 };
+
+export type ExtractVariables<T> = T extends { variables: object } ? T['variables'] : never;
