@@ -1,75 +1,52 @@
+import 'server-only';
+
 import { BaseRepository } from '@/repositories/base-repository';
+import { ShopifyFetcher } from '@/lib/utils/fetchers/shopify-fetcher';
 import { ensureStartsWith } from '@/lib/utils';
-import { isShopifyError } from '@/lib/type-guards';
 import { SHOPIFY_GRAPHQL_API_ENDPOINT } from '@/lib/constants';
 import { Connection, ExtractVariables } from '@/lib/shopify/types';
 
-export class ShopifyRepository implements BaseRepository {
-  protected domain: string;
-  private endpoint: string;
-  private key: string;
+const { SHOPIFY_STORE_DOMAIN } = process.env;
+
+export abstract class ShopifyRepository extends BaseRepository {
+  protected domain = SHOPIFY_STORE_DOMAIN ? ensureStartsWith(SHOPIFY_STORE_DOMAIN, 'https://') : '';
+
+  protected endpoint: string = `${this.domain}${SHOPIFY_GRAPHQL_API_ENDPOINT}`;
 
   constructor() {
-    const { SHOPIFY_STORE_DOMAIN, SHOPIFY_STOREFRONT_ACCESS_TOKEN } = process.env;
-    this.domain = SHOPIFY_STORE_DOMAIN ? ensureStartsWith(SHOPIFY_STORE_DOMAIN, 'https://') : '';
-    this.endpoint = `${this.domain}${SHOPIFY_GRAPHQL_API_ENDPOINT}`;
-    this.key = SHOPIFY_STOREFRONT_ACCESS_TOKEN!;
+    super();
+
+    if (!ShopifyFetcher.fetcher) {
+      ShopifyFetcher.fetcher = new ShopifyFetcher();
+    }
+
+    this.fetcher = ShopifyFetcher.fetcher;
   }
 
-  async fetch<T>({
-    cache = 'force-cache',
-    headers,
+  async get<T>({
     query,
+    variables,
+    headers,
     tags,
-    variables
+    cache = 'force-cache'
   }: {
-    cache?: RequestCache;
-    headers?: HeadersInit;
     query: string;
-    tags?: string[];
     variables?: ExtractVariables<T>;
-  }): Promise<{ status: number; body: T } | never> {
-    try {
-      const result = await fetch(this.endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Shopify-Storefront-Access-Token': this.key,
-          ...headers
-        },
-        body: JSON.stringify({
-          ...(query && { query }),
-          ...(variables && { variables })
-        }),
-        cache,
-        ...(tags && { next: { tags } })
-      });
+    headers?: HeadersInit;
+    tags?: string[];
+    cache?: RequestCache;
+  }): Promise<T> {
+    const response = await this.fetcher.post(this.endpoint, {
+      headers,
+      body: JSON.stringify({
+        ...(query && { query }),
+        ...(variables && { variables })
+      }),
+      cache,
+      ...(tags && { next: { tags } })
+    });
 
-      const body = await result.json();
-
-      if (body.errors) {
-        throw body.errors[0];
-      }
-
-      return {
-        status: result.status,
-        body
-      };
-    } catch (e) {
-      if (isShopifyError(e)) {
-        throw {
-          cause: e.cause?.toString() || 'unknown',
-          status: e.status || 500,
-          message: e.message,
-          query
-        };
-      }
-
-      throw {
-        error: e,
-        query
-      };
-    }
+    return response as T;
   }
 
   protected removeEdgesAndNodes<T>(connection: Connection<T>): T[] {
