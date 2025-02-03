@@ -1,17 +1,18 @@
-import { ExtractVariables } from '@/lib/shopify/types';
+import { Fetcher } from '@/lib/utils/fetchers/fetcher';
+import { IFetcher } from '@/lib/types/utils/fetcher';
 
-export interface BaseRepository {
-  fetch<T>({
-    cache,
-    headers,
-    query,
-    tags,
-    variables
-  }: {
-    cache?: RequestCache;
-    headers?: HeadersInit;
-    query: string;
-    tags?: string[];
-    variables?: ExtractVariables<T>;
-  }): Promise<{ status: number; body: T }>;
+export abstract class BaseRepository {
+  protected static fetcher: IFetcher;
+
+  protected abstract endpoint: string;
+
+  protected fetcher: IFetcher;
+
+  constructor() {
+    if (!BaseRepository.fetcher) {
+      BaseRepository.fetcher = new Fetcher();
+    }
+
+    this.fetcher = BaseRepository.fetcher;
+  }
 }
