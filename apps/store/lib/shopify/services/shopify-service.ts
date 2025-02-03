@@ -1,10 +1,8 @@
-import { NextRequest } from 'next/server';
 import { CartRepository } from '@/lib/shopify/repositories/cart-repository';
 import { ProductRepository } from '@/lib/shopify/repositories/product-repository';
 import { PageRepository } from '@/lib/shopify/repositories/page-repository';
 import { CollectionRepository } from '@/lib/shopify/repositories/collection-repository';
 import { MenuRepository } from '@/lib/shopify/repositories/menu-repository';
-import { RevalidationRepository } from '@/lib/shopify/repositories/revalidation-repository';
 
 export class ShopifyService {
   private cartRepository: CartRepository;
@@ -12,7 +10,6 @@ export class ShopifyService {
   private collectionRepository: CollectionRepository;
   private pageRepository: PageRepository;
   private menuRepository: MenuRepository;
-  private revalidationRepository: RevalidationRepository;
 
   constructor() {
     this.cartRepository = new CartRepository();
@@ -20,7 +17,6 @@ export class ShopifyService {
     this.collectionRepository = new CollectionRepository(this.productRepository);
     this.pageRepository = new PageRepository();
     this.menuRepository = new MenuRepository();
-    this.revalidationRepository = new RevalidationRepository();
   }
 
   // Cart methods
@@ -89,11 +85,6 @@ export class ShopifyService {
   // Menu methods
   async getMenu(handle: string) {
     return this.menuRepository.getMenu(handle);
-  }
-
-  // Revalidation method
-  async revalidate(req: NextRequest) {
-    return this.revalidationRepository.revalidate(req);
   }
 }
 
