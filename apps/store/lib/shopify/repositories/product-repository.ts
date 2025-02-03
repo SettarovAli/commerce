@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { ShopifyRepository } from '@/lib/shopify/repositories/shopify-repository';
 import {
   getProductQuery,
@@ -17,13 +19,13 @@ import {
 
 export class ProductRepository extends ShopifyRepository {
   async getProduct(handle: string): Promise<Product | undefined> {
-    const res = await this.fetch<ShopifyProductOperation>({
+    const res = await this.get<ShopifyProductOperation>({
       query: getProductQuery,
       tags: [TAGS.products],
       variables: { handle }
     });
 
-    return this.reshapeProduct(res.body.data.product, false);
+    return this.reshapeProduct(res.data.product, false);
   }
 
   async getProducts(options: {
@@ -31,24 +33,24 @@ export class ProductRepository extends ShopifyRepository {
     reverse?: boolean;
     sortKey?: string;
   }): Promise<Product[]> {
-    const res = await this.fetch<ShopifyProductsOperation>({
+    const res = await this.get<ShopifyProductsOperation>({
       query: getProductsQuery,
       tags: [TAGS.products],
       variables: options
     });
 
-    const products = this.removeEdgesAndNodes(res.body.data.products);
+    const products = this.removeEdgesAndNodes(res.data.products);
     return this.reshapeProducts(products);
   }
 
   async getProductRecommendations(productId: string): Promise<Product[]> {
-    const res = await this.fetch<ShopifyProductRecommendationsOperation>({
+    const res = await this.get<ShopifyProductRecommendationsOperation>({
       query: getProductRecommendationsQuery,
       tags: [TAGS.products],
       variables: { productId }
     });
 
-    return this.reshapeProducts(res.body.data.productRecommendations);
+    return this.reshapeProducts(res.data.productRecommendations);
   }
 
   reshapeProducts(products: ShopifyProduct[]): Product[] {
