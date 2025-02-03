@@ -1,10 +1,12 @@
 'use client';
 
-import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import { updateItemQuantity } from 'components/cart/actions';
+import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'react-toastify';
+
+import { updateCartItemQuantityAction } from '@/actions/cart/update-cart-item-quantity';
 import type { CartItem } from 'lib/shopify/types';
-import { useActionState } from 'react';
 
 function SubmitButton({ type }: { type: 'plus' | 'minus' }) {
   return (
@@ -36,23 +38,27 @@ export function EditItemQuantityButton({
   type: 'plus' | 'minus';
   optimisticUpdate: any;
 }) {
-  const [message, formAction] = useActionState(updateItemQuantity, null);
   const payload = {
     merchandiseId: item.merchandise.id,
     quantity: type === 'plus' ? item.quantity + 1 : item.quantity - 1
   };
-  const actionWithVariant = formAction.bind(null, payload);
+
+  const { execute: updateCartItemQuantity, result } = useAction(updateCartItemQuantityAction, {
+    onError: ({ error }) => {
+      toast.error(error.serverError);
+    }
+  });
+
+  const action = () => {
+    optimisticUpdate(payload.merchandiseId, type);
+    updateCartItemQuantity(payload);
+  };
 
   return (
-    <form
-      action={async () => {
-        optimisticUpdate(payload.merchandiseId, type);
-        await actionWithVariant();
-      }}
-    >
+    <form action={action}>
       <SubmitButton type={type} />
       <p aria-live="polite" className="sr-only" role="status">
-        {message}
+        {result?.serverError}
       </p>
     </form>
   );
