@@ -7,20 +7,25 @@ import { Menu, ShopifyMenuOperation } from '@/lib/shopify/types';
 
 export class MenuRepository extends ShopifyRepository {
   async getMenu(handle: string): Promise<Menu[]> {
-    const res = await this.get<ShopifyMenuOperation>({
-      query: getMenuQuery,
-      tags: [TAGS.collections],
-      variables: { handle }
-    });
+    try {
+      const res = await this.get<ShopifyMenuOperation>({
+        query: getMenuQuery,
+        tags: [TAGS.collections],
+        variables: { handle }
+      });
 
-    return (
-      res.data?.menu?.items.map((item: { title: string; url: string }) => ({
-        title: item.title,
-        path: item.url
-          .replace(this.domain, '')
-          .replace('/collections', '/search')
-          .replace('/pages', '')
-      })) || []
-    );
+      return (
+        res.data?.menu?.items.map((item: { title: string; url: string }) => ({
+          title: item.title,
+          path: item.url
+            .replace(this.domain, '')
+            .replace('/collections', '/search')
+            .replace('/pages', '')
+        })) || []
+      );
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   }
 }
