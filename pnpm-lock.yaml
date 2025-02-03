@@ -168,6 +168,9 @@ importers:
       react-toastify:
         specifier: ^11.0.2
         version: 11.0.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
       zod:
         specifier: ^3.24.1
         version: 3.24.1
