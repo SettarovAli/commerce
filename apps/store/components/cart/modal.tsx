@@ -10,7 +10,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { createCartAndSetCookie, redirectToCheckout } from './actions';
+import { redirectToCheckout } from './actions';
+import { createCart } from '@/actions/cart/create-cart';
 import { useCart } from './cart-context';
 import CloseCart from './close-cart';
 import { DeleteItemButton } from './delete-item-button';
@@ -29,9 +30,7 @@ export default function CartModal() {
   const closeCart = () => setIsOpen(false);
 
   useEffect(() => {
-    if (!cart) {
-      createCartAndSetCookie();
-    }
+    if (!cart) createCart();
   }, [cart]);
 
   useEffect(() => {

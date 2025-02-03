@@ -88,8 +88,3 @@ export async function redirectToCheckout() {
 
   redirect(cart!.checkoutUrl);
 }
-
-export async function createCartAndSetCookie() {
-  let cart = await shopifyService.createCart();
-  (await cookies()).set('cartId', cart.id!);
-}
