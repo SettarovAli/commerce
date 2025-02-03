@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { ShopifyRepository } from '@/lib/shopify/repositories/shopify-repository';
 import { ProductRepository } from '@/lib/shopify/repositories/product-repository';
 import {
@@ -25,22 +27,22 @@ export class CollectionRepository extends ShopifyRepository {
   }
 
   async getCollection(handle: string): Promise<Collection | undefined> {
-    const res = await this.fetch<ShopifyCollectionOperation>({
+    const res = await this.get<ShopifyCollectionOperation>({
       query: getCollectionQuery,
       tags: [TAGS.collections],
       variables: { handle }
     });
 
-    return this.reshapeCollection(res.body.data.collection);
+    return this.reshapeCollection(res.data.collection);
   }
 
   async getCollections(): Promise<Collection[]> {
-    const res = await this.fetch<ShopifyCollectionsOperation>({
+    const res = await this.get<ShopifyCollectionsOperation>({
       query: getCollectionsQuery,
       tags: [TAGS.collections]
     });
 
-    const shopifyCollections = this.removeEdgesAndNodes(res.body?.data?.collections);
+    const shopifyCollections = this.removeEdgesAndNodes(res.data?.collections);
     const collections = [
       {
         handle: '',
@@ -72,7 +74,7 @@ export class CollectionRepository extends ShopifyRepository {
     reverse?: boolean;
     sortKey?: string;
   }): Promise<Product[]> {
-    const res = await this.fetch<ShopifyCollectionProductsOperation>({
+    const res = await this.get<ShopifyCollectionProductsOperation>({
       query: getCollectionProductsQuery,
       tags: [TAGS.collections, TAGS.products],
       variables: {
@@ -82,12 +84,12 @@ export class CollectionRepository extends ShopifyRepository {
       }
     });
 
-    if (!res.body.data.collection) {
+    if (!res.data.collection) {
       console.log(`No collection found for \`${collection}\``);
       return [];
     }
 
-    const products = this.removeEdgesAndNodes(res.body.data.collection.products);
+    const products = this.removeEdgesAndNodes(res.data.collection.products);
     return this.reshapeProducts(products);
   }
 
