@@ -9,7 +9,10 @@ import AuthProvider from '@/lib/firebase/auth/context';
 import { getBaseUrl } from '@/lib/utils/get-base-url';
 import { ensureStartsWith } from '@/lib/utils';
 import { shopifyService } from '@/lib/shopify/services/shopify-service';
+import { CART_ID_COOKIE } from '@/lib/constants';
+
 import packageJson from '../package.json';
+
 import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -39,7 +42,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const cartId = (await cookies()).get('cartId')?.value;
+  const cartId = (await cookies()).get(CART_ID_COOKIE)?.value;
   // Don't await the fetch, pass the Promise to the context provider
   const cart = shopifyService.getCart(cartId);
 

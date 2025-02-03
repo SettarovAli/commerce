@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { actionClient } from '@/lib/safe-action';
 import { shopifyService } from '@/lib/shopify/services/shopify-service';
-import { TAGS } from '@/lib/constants';
+import { CART_ID_COOKIE, TAGS } from '@/lib/constants';
 
 const schema = z.object({
   merchandiseId: z.string()
@@ -15,7 +15,7 @@ const schema = z.object({
 export const deleteCartItemAction = actionClient
   .schema(schema)
   .action(async ({ parsedInput: { merchandiseId } }) => {
-    const cartId = (await cookies()).get('cartId')?.value;
+    const cartId = (await cookies()).get(CART_ID_COOKIE)?.value;
 
     if (!cartId) throw new Error('Missing cart ID');
 
