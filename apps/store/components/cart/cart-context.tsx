@@ -11,8 +11,8 @@ type CartAction =
 
 type CartContextType = {
   cart: Cart | undefined;
-  updateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
-  addCartItem: (variant: ProductVariant, product: Product) => void;
+  optimisticUpdateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
+  optimisticAddCartItem: (variant: ProductVariant, product: Product) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -155,19 +155,19 @@ export function CartProvider({
   const initialCart = use(cartPromise);
   const [optimisticCart, updateOptimisticCart] = useOptimistic(initialCart, cartReducer);
 
-  const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
+  const optimisticUpdateCartItem = (merchandiseId: string, updateType: UpdateType) => {
     updateOptimisticCart({ type: 'UPDATE_ITEM', payload: { merchandiseId, updateType } });
   };
 
-  const addCartItem = (variant: ProductVariant, product: Product) => {
+  const optimisticAddCartItem = (variant: ProductVariant, product: Product) => {
     updateOptimisticCart({ type: 'ADD_ITEM', payload: { variant, product } });
   };
 
   const value = useMemo(
     () => ({
       cart: optimisticCart,
-      updateCartItem,
-      addCartItem
+      optimisticUpdateCartItem,
+      optimisticAddCartItem
     }),
     [optimisticCart]
   );

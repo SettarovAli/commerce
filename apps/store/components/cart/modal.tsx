@@ -22,7 +22,7 @@ type MerchandiseSearchParams = {
 };
 
 export default function CartModal() {
-  const { cart, updateCartItem } = useCart();
+  const { cart, optimisticUpdateCartItem } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const quantityRef = useRef(cart?.totalQuantity);
   const openCart = () => setIsOpen(true);
@@ -115,7 +115,10 @@ export default function CartModal() {
                           >
                             <div className="relative flex w-full flex-row justify-between px-1 py-4">
                               <div className="absolute z-40 -ml-1 -mt-2">
-                                <DeleteItemButton item={item} optimisticUpdate={updateCartItem} />
+                                <DeleteItemButton
+                                  item={item}
+                                  optimisticUpdate={optimisticUpdateCartItem}
+                                />
                               </div>
                               <div className="flex flex-row">
                                 <div className="relative h-16 w-16 overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800">
@@ -157,7 +160,7 @@ export default function CartModal() {
                                   <EditItemQuantityButton
                                     item={item}
                                     type="minus"
-                                    optimisticUpdate={updateCartItem}
+                                    optimisticUpdate={optimisticUpdateCartItem}
                                   />
                                   <p className="w-6 text-center">
                                     <span className="w-full text-sm">{item.quantity}</span>
@@ -165,7 +168,7 @@ export default function CartModal() {
                                   <EditItemQuantityButton
                                     item={item}
                                     type="plus"
-                                    optimisticUpdate={updateCartItem}
+                                    optimisticUpdate={optimisticUpdateCartItem}
                                   />
                                 </div>
                               </div>
