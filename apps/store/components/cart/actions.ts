@@ -14,7 +14,7 @@ export async function updateItemQuantity(
     quantity: number;
   }
 ) {
-  let cartId = (await cookies()).get('cartId')?.value;
+  const cartId = (await cookies()).get('cartId')?.value;
 
   if (!cartId) {
     return 'Missing cart ID';
@@ -53,11 +53,4 @@ export async function updateItemQuantity(
     console.error(e);
     return 'Error updating item quantity';
   }
-}
-
-export async function redirectToCheckout() {
-  let cartId = (await cookies()).get('cartId')?.value;
-  let cart = await shopifyService.getCart(cartId);
-
-  redirect(cart!.checkoutUrl);
 }
