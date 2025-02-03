@@ -1,9 +1,11 @@
 'use client';
 
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { removeItem } from 'components/cart/actions';
-import type { CartItem } from 'lib/shopify/types';
-import { useActionState } from 'react';
+import { useAction } from 'next-safe-action/hooks';
+import { toast } from 'react-toastify';
+
+import { deleteCartItemAction } from '@/actions/cart/delete-cart-item';
+import type { CartItem } from '@/lib/shopify/types';
 
 export function DeleteItemButton({
   item,
@@ -12,17 +14,22 @@ export function DeleteItemButton({
   item: CartItem;
   optimisticUpdate: any;
 }) {
-  const [message, formAction] = useActionState(removeItem, null);
   const merchandiseId = item.merchandise.id;
-  const actionWithVariant = formAction.bind(null, merchandiseId);
+
+  const { execute: deleteCartItem, result } = useAction(deleteCartItemAction, {
+    onError: ({ error }) => {
+      toast.error(error.serverError);
+    }
+  });
+
+  const action = () => {
+    console.log('merchandiseId', merchandiseId);
+    optimisticUpdate(merchandiseId, 'delete');
+    deleteCartItem({ merchandiseId });
+  };
 
   return (
-    <form
-      action={async () => {
-        optimisticUpdate(merchandiseId, 'delete');
-        await actionWithVariant();
-      }}
-    >
+    <form action={action}>
       <button
         type="submit"
         aria-label="Remove cart item"
@@ -31,7 +38,7 @@ export function DeleteItemButton({
         <XMarkIcon className="mx-[1px] h-4 w-4 text-white dark:text-black" />
       </button>
       <p aria-live="polite" className="sr-only" role="status">
-        {message}
+        {result?.serverError}
       </p>
     </form>
   );
