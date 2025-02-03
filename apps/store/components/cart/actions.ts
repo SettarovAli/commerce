@@ -7,21 +7,6 @@ import { redirect } from 'next/navigation';
 import { shopifyService } from '@/lib/shopify/services/shopify-service';
 import { TAGS } from 'lib/constants';
 
-export async function addItem(prevState: any, selectedVariantId: string | undefined) {
-  let cartId = (await cookies()).get('cartId')?.value;
-
-  if (!cartId || !selectedVariantId) {
-    return 'Error adding item to cart';
-  }
-
-  try {
-    await shopifyService.addToCart(cartId, [{ merchandiseId: selectedVariantId, quantity: 1 }]);
-    revalidateTag(TAGS.cart);
-  } catch (e) {
-    return 'Error adding item to cart';
-  }
-}
-
 export async function removeItem(prevState: any, merchandiseId: string) {
   let cartId = (await cookies()).get('cartId')?.value;
 

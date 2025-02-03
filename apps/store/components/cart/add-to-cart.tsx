@@ -2,11 +2,13 @@
 
 import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import { addItem } from 'components/cart/actions';
-import { useProduct } from 'components/product/product-context';
-import { Product, ProductVariant } from 'lib/shopify/types';
-import { useActionState } from 'react';
+import { toast } from 'react-toastify';
+import { useAction } from 'next-safe-action/hooks';
+
+import { useProduct } from '@/components/product/product-context';
 import { useCart } from './cart-context';
+import { addCartItemAction } from '@/actions/cart/add-cart-item';
+import { Product, ProductVariant } from '@/lib/shopify/types';
 
 function SubmitButton({
   availableForSale,
@@ -27,7 +29,6 @@ function SubmitButton({
     );
   }
 
-  console.log(selectedVariantId);
   if (!selectedVariantId) {
     return (
       <button
@@ -60,28 +61,33 @@ function SubmitButton({
 
 export function AddToCart({ product }: { product: Product }) {
   const { variants, availableForSale } = product;
-  const { addCartItem } = useCart();
+
+  const { optimisticAddCartItem } = useCart();
   const { state } = useProduct();
-  const [message, formAction] = useActionState(addItem, null);
+
+  const { execute: addCartItem, result } = useAction(addCartItemAction, {
+    onError: ({ error }) => {
+      toast.error(error.serverError);
+    }
+  });
 
   const variant = variants.find((variant: ProductVariant) =>
     variant.selectedOptions.every((option) => option.value === state[option.name.toLowerCase()])
   );
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
   const selectedVariantId = variant?.id || defaultVariantId;
-  const actionWithVariant = formAction.bind(null, selectedVariantId);
   const finalVariant = variants.find((variant) => variant.id === selectedVariantId)!;
 
+  const action = () => {
+    optimisticAddCartItem(finalVariant, product);
+    addCartItem({ selectedVariantId });
+  };
+
   return (
-    <form
-      action={async () => {
-        addCartItem(finalVariant, product);
-        await actionWithVariant();
-      }}
-    >
+    <form action={action}>
       <SubmitButton availableForSale={availableForSale} selectedVariantId={selectedVariantId} />
       <p aria-live="polite" className="sr-only" role="status">
-        {message}
+        {result?.serverError}
       </p>
     </form>
   );
