@@ -8,7 +8,7 @@ import { Menu, ShopifyMenuOperation } from '@/lib/shopify/types';
 export class MenuRepository extends ShopifyRepository {
   async getMenu(handle: string): Promise<Menu[]> {
     try {
-      const res = await this.get<ShopifyMenuOperation>({
+      const res = await this.fetch<ShopifyMenuOperation>({
         query: getMenuQuery,
         tags: [TAGS.collections],
         variables: { handle }

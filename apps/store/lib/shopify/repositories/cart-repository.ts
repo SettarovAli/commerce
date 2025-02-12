@@ -21,7 +21,7 @@ import {
 
 export class CartRepository extends ShopifyRepository {
   async createCart(): Promise<Cart> {
-    const res = await this.get<ShopifyCreateCartOperation>({
+    const res = await this.fetch<ShopifyCreateCartOperation>({
       query: createCartMutation,
       cache: 'no-store'
     });
@@ -33,7 +33,7 @@ export class CartRepository extends ShopifyRepository {
     cartId: string,
     lines: { merchandiseId: string; quantity: number }[]
   ): Promise<Cart> {
-    const res = await this.get<ShopifyAddToCartOperation>({
+    const res = await this.fetch<ShopifyAddToCartOperation>({
       query: addToCartMutation,
       variables: { cartId, lines },
       cache: 'no-store'
@@ -43,7 +43,7 @@ export class CartRepository extends ShopifyRepository {
   }
 
   async removeFromCart(cartId: string, lineIds: string[]): Promise<Cart> {
-    const res = await this.get<ShopifyRemoveFromCartOperation>({
+    const res = await this.fetch<ShopifyRemoveFromCartOperation>({
       query: removeFromCartMutation,
       variables: { cartId, lineIds },
       cache: 'no-store'
@@ -56,7 +56,7 @@ export class CartRepository extends ShopifyRepository {
     cartId: string,
     lines: { id: string; merchandiseId: string; quantity: number }[]
   ): Promise<Cart> {
-    const res = await this.get<ShopifyUpdateCartOperation>({
+    const res = await this.fetch<ShopifyUpdateCartOperation>({
       query: editCartItemsMutation,
       variables: { cartId, lines },
       cache: 'no-store'
@@ -70,7 +70,7 @@ export class CartRepository extends ShopifyRepository {
       return undefined;
     }
 
-    const res = await this.get<ShopifyCartOperation>({
+    const res = await this.fetch<ShopifyCartOperation>({
       query: getCartQuery,
       variables: { cartId },
       tags: [TAGS.cart]

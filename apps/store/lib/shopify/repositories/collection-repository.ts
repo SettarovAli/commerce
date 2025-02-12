@@ -27,7 +27,7 @@ export class CollectionRepository extends ShopifyRepository {
   }
 
   async getCollection(handle: string): Promise<Collection | undefined> {
-    const res = await this.get<ShopifyCollectionOperation>({
+    const res = await this.fetch<ShopifyCollectionOperation>({
       query: getCollectionQuery,
       tags: [TAGS.collections],
       variables: { handle }
@@ -37,7 +37,7 @@ export class CollectionRepository extends ShopifyRepository {
   }
 
   async getCollections(): Promise<Collection[]> {
-    const res = await this.get<ShopifyCollectionsOperation>({
+    const res = await this.fetch<ShopifyCollectionsOperation>({
       query: getCollectionsQuery,
       tags: [TAGS.collections]
     });
@@ -74,7 +74,7 @@ export class CollectionRepository extends ShopifyRepository {
     reverse?: boolean;
     sortKey?: string;
   }): Promise<Product[]> {
-    const res = await this.get<ShopifyCollectionProductsOperation>({
+    const res = await this.fetch<ShopifyCollectionProductsOperation>({
       query: getCollectionProductsQuery,
       tags: [TAGS.collections, TAGS.products],
       variables: {

@@ -23,7 +23,7 @@ export abstract class ShopifyRepository extends BaseRepository {
     this.fetcher = ShopifyFetcher.fetcher;
   }
 
-  async get<T>({
+  async fetch<T>({
     query,
     variables,
     headers,

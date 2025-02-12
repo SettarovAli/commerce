@@ -6,7 +6,7 @@ import { Page, ShopifyPageOperation, ShopifyPagesOperation } from '@/lib/shopify
 
 export class PageRepository extends ShopifyRepository {
   async getPage(handle: string): Promise<Page> {
-    const res = await this.get<ShopifyPageOperation>({
+    const res = await this.fetch<ShopifyPageOperation>({
       query: getPageQuery,
       cache: 'no-store',
       variables: { handle }
@@ -16,7 +16,7 @@ export class PageRepository extends ShopifyRepository {
   }
 
   async getPages(): Promise<Page[]> {
-    const res = await this.get<ShopifyPagesOperation>({
+    const res = await this.fetch<ShopifyPagesOperation>({
       query: getPagesQuery,
       cache: 'no-store'
     });

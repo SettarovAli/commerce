@@ -19,7 +19,7 @@ import {
 
 export class ProductRepository extends ShopifyRepository {
   async getProduct(handle: string): Promise<Product | undefined> {
-    const res = await this.get<ShopifyProductOperation>({
+    const res = await this.fetch<ShopifyProductOperation>({
       query: getProductQuery,
       tags: [TAGS.products],
       variables: { handle }
@@ -33,7 +33,7 @@ export class ProductRepository extends ShopifyRepository {
     reverse?: boolean;
     sortKey?: string;
   }): Promise<Product[]> {
-    const res = await this.get<ShopifyProductsOperation>({
+    const res = await this.fetch<ShopifyProductsOperation>({
       query: getProductsQuery,
       tags: [TAGS.products],
       variables: options
@@ -44,7 +44,7 @@ export class ProductRepository extends ShopifyRepository {
   }
 
   async getProductRecommendations(productId: string): Promise<Product[]> {
-    const res = await this.get<ShopifyProductRecommendationsOperation>({
+    const res = await this.fetch<ShopifyProductRecommendationsOperation>({
       query: getProductRecommendationsQuery,
       tags: [TAGS.products],
       variables: { productId }
